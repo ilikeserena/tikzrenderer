@@ -5,21 +5,51 @@ SETUP ON A NEW SYSTEM
 
 1. Install lampp on a linux system (https://www.apachefriends.org/download.html).
 
-2. Execute the following commands in a bash shell:
+2. Configure lampp to run CGI scripts by changing /opt/lampp/etc/httpd.conf.
+   It should say "Options ExecCGI" in the <Directory "/opt/lampp/cgi-bin"> section.
+   
+3. Start Apache with "sudo /opt/lampp/lampp startapache".
+   Verify Apache works by entering "http://localhost" in the address bar of a web browser.
+   Verify CGI works by following the directions in cgi-bin/test-cgi
+   and entering "http://localhost/cgi-bin/test-cgi".
 
-   cd <lampp directory>
+4. Install the tikz renderer functionality with:
+   cd /opt/lampp
    # Retrieve cgi-bin scripts
    cd cgi-bin
-   git clone https://github.com/ilikeserena/tikzrenderer.git ./
+   sudo git clone https://github.com/ilikeserena/tikzrenderer.git ./
    cd ..
-   # Create relevant directories
+   
+5. Create relevant directories and set permissions:
    cd htdocs
-   mkdir tikz
-   mkdir tikz/tmp
+   sudo mkdir tikz
+   sudo mkdir tikz/tmp
    # Fix permissions so that requests to cgi-bin scripts can create files in those directories
+   sudo chown daemon:daemon tikz
+   sudo chown daemon:daemon tikz/tmp
 
-3. Verify installation with the following address in a web browser:
+6. Install TIKZ software:
+   sudo apt install texlive-latex-base
+   sudo apt install texlive-latex-extra
+   sudo apt install lacheck
+
+7. Add support for SVG.
+   Edit /opt/lampp/etc/httpd.conf and add in the <IfModule mime_module> section:
+    AddType image/svg+xml svg svgz
+    AddEncoding gzip svgz
+    
+   Restart Apache with "sudo /opt/lampp/lampp reloadapache".
+
+8. Verify installation with the following address in a web browser:
    http://localhost/cgi-bin/tikztest.pl
    It should show a page in which you can enter a tikz picture and submit it.
 
-4. Set up a cron job to get rid of spammy tikz requests
+9. Set up a cron job to get rid of spammy tikz requests
+   Create /etc/cron.hourly/cleanup_tikz with contents:
+    #!/bin/bash
+    logger "Running cleanup_tikz"
+    find /opt/lampp/htdocs/tikz -name "live_*" -mtime +1 -exec rm {} \;
+    find /opt/lampp/htdocs/tikz -name "preview_*" -mtime +1 -exec rm {} \;
+   Set permissions with:
+    sudo chmod a+x /etc/cron.hourly/cleanup_tikz
+   Verify it works by checking /var/log/syslog that should show "Running cleanup_tikz".
