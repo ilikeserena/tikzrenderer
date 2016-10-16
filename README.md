@@ -3,16 +3,13 @@
 # SETUP ON A NEW SYSTEM
 
 1. Install lampp on a linux system (https://www.apachefriends.org/download.html).
-
 2. Configure lampp to run CGI scripts by changing /opt/lampp/etc/httpd.conf.
    It should say "Options ExecCGI" in the <Directory "/opt/lampp/cgi-bin"> section.
-   
 3. Start Apache with "sudo /opt/lampp/lampp startapache".
    Verify Apache works by entering "http://localhost" in the address bar of a web browser.
    Verify CGI works by following the directions in cgi-bin/test-cgi
    and entering "http://localhost/cgi-bin/test-cgi" in the address bar of a web browser.
-
-4. Install the tikz renderer functionality with:
+4. Install the tikz renderer functionality with: 
 ```
    cd /opt/lampp
    # Retrieve cgi-bin scripts
@@ -44,7 +41,6 @@
     \begin{tikzpicture} \draw (0,0) -- (1,1); \end{tikzpicture}
 ```
    As a result we should see a .png image and a .svg image (see next item if SVG does not work).
-
 8. Add support for SVG to the web server if it doesn't work:
    Edit /opt/lampp/etc/httpd.conf and add in the <IfModule mime_module> section:
 ```
@@ -52,7 +48,6 @@
     AddEncoding gzip svgz
 ```
    Restart Apache with "sudo /opt/lampp/lampp reloadapache".
-
 9. Set up a cron job to get rid of spammy tikz requests.
    Create /etc/cron.hourly/cleanup_tikz with contents:
 ```
@@ -66,7 +61,6 @@
     sudo chmod a+x /etc/cron.hourly/cleanup_tikz
 ```
    Verify it works by checking /var/log/syslog that should show "Running cleanup_tikz" after an hour.
-
 10. Configure to run Apache automatically (Ubuntu)
 ```
     sudo ln -s /opt/lampp/lampp /etc/init.d/lampp
