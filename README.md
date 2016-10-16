@@ -11,7 +11,7 @@ SETUP ON A NEW SYSTEM
 3. Start Apache with "sudo /opt/lampp/lampp startapache".
    Verify Apache works by entering "http://localhost" in the address bar of a web browser.
    Verify CGI works by following the directions in cgi-bin/test-cgi
-   and entering "http://localhost/cgi-bin/test-cgi".
+   and entering "http://localhost/cgi-bin/test-cgi" in the address bar of a web browser.
 
 4. Install the tikz renderer functionality with:
    cd /opt/lampp
@@ -56,3 +56,7 @@ SETUP ON A NEW SYSTEM
    Set permissions with:
     sudo chmod a+x /etc/cron.hourly/cleanup_tikz
    Verify it works by checking /var/log/syslog that should show "Running cleanup_tikz" after an hour.
+
+10. Configure to run Apache automatically (Ubuntu)
+    sudo ln -s /opt/lampp/lampp /etc/init.d/lampp
+    sudo update-rc.d lampp start 80 3 5 . stop 30 0 1 2 6 .
