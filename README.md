@@ -37,6 +37,7 @@
     \begin{tikzpicture} \draw (0,0) -- (1,1); \end{tikzpicture}
 ```
    As a result we should see a .png image and a .svg image (see next item if SVG does not work).
+   
 8. Add support for SVG to the web server if it doesn't work:
    Edit /opt/lampp/etc/httpd.conf and add in the <IfModule mime_module> section:
 ```
@@ -44,6 +45,7 @@
     AddEncoding gzip svgz
 ```
    Restart Apache with "sudo /opt/lampp/lampp reloadapache".
+   
 9. Set up a cron job to get rid of spammy tikz requests.
    Create /etc/cron.hourly/cleanup_tikz with contents:
 ```bash
@@ -57,6 +59,7 @@
     sudo chmod a+x /etc/cron.hourly/cleanup_tikz
 ```
    Verify it works by checking /var/log/syslog that should show "Running cleanup_tikz" after an hour.
+   
 10. Configure to run Apache automatically (Ubuntu)
 ```bash
     sudo ln -s /opt/lampp/lampp /etc/init.d/lampp
