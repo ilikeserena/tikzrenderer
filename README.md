@@ -31,20 +31,23 @@ SETUP ON A NEW SYSTEM
 6. Install TIKZ software:
    sudo apt install texlive-latex-base
    sudo apt install texlive-latex-extra
+   sudo apt install pdf2svg
    sudo apt install lacheck
 
-7. Add support for SVG.
+7. Verify installation with the following address in a web browser:
+   http://localhost/cgi-bin/tikztest.pl
+   It should show a page in which you can enter a tikz picture and submit it.
+   For instance:
+    \begin{tikzpicture} \draw (0,0) -- (1,1); \end{tikzpicture}
+   As a result we should see a .png image and a .svg image (see next item if SVG does not work).
+
+8. Add support for SVG to the web server if it doesn't work:
    Edit /opt/lampp/etc/httpd.conf and add in the <IfModule mime_module> section:
     AddType image/svg+xml svg svgz
     AddEncoding gzip svgz
-    
    Restart Apache with "sudo /opt/lampp/lampp reloadapache".
 
-8. Verify installation with the following address in a web browser:
-   http://localhost/cgi-bin/tikztest.pl
-   It should show a page in which you can enter a tikz picture and submit it.
-
-9. Set up a cron job to get rid of spammy tikz requests
+9. Set up a cron job to get rid of spammy tikz requests.
    Create /etc/cron.hourly/cleanup_tikz with contents:
     #!/bin/bash
     logger "Running cleanup_tikz"
@@ -52,4 +55,4 @@ SETUP ON A NEW SYSTEM
     find /opt/lampp/htdocs/tikz -name "preview_*" -mtime +1 -exec rm {} \;
    Set permissions with:
     sudo chmod a+x /etc/cron.hourly/cleanup_tikz
-   Verify it works by checking /var/log/syslog that should show "Running cleanup_tikz".
+   Verify it works by checking /var/log/syslog that should show "Running cleanup_tikz" after an hour.
