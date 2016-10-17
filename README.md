@@ -1,5 +1,7 @@
 # tikzrenderer
 
+Note: It's easiest to read this file in "raw" mode, since otherwise the formatting goes haywire.
+
 # SETUP ON A NEW SYSTEM
 
 1. Install lampp on a linux system (https://www.apachefriends.org/download.html).
@@ -34,7 +36,9 @@
    It should show a page in which you can enter a tikz picture and submit it.
    For instance:
 ```latex
-    \begin{tikzpicture} \draw (0,0) -- (1,1); \end{tikzpicture}
+    \begin{tikzpicture}
+    \draw (0,0) -- (1,1);
+    \end{tikzpicture}
 ```
    As a result we should see a .png image and a .svg image (see next item if SVG does not work).
    
