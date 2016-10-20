@@ -19,7 +19,7 @@
    # Retrieve the tikz renderer functionality
    sudo git clone https://github.com/ilikeserena/tikzrenderer.git ./
    # Restore what we saved before
-   sudo tar xzfg ../cgi.tgz
+   sudo tar xzpf ../cgi.tgz
    sudo rm ../cgi.tgz
 ```
 5. Create relevant directories, copy .png files, and set permissions:
