@@ -16,13 +16,13 @@ Note: It's easiest to read this file in "raw" mode, since otherwise the formatti
    cd /opt/lampp/cgi-bin
    sudo git clone https://github.com/ilikeserena/tikzrenderer.git ./
 ```
-5. Create relevant directories and set permissions:
+5. Create relevant directories, copy .png files, and set permissions:
 ```bash
    cd /opt/lampp/htdocs
    sudo mkdir tikz
    sudo mkdir tikz/tmp
-   sudo chown daemon:daemon tikz
-   sudo chown daemon:daemon tikz/tmp
+   sudo cp /opt/lampp/cgi-bin/*.png tikz/
+   sudo chown -R daemon:daemon tikz
 ```
 6. Install TIKZ software:
 ```bash
