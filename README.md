@@ -1,6 +1,6 @@
 # tikzrenderer
 
-# SETUP ON A NEW SYSTEM (verified on Ubuntu 16.04 LTS 64-bits)
+# SETUP (verified on Ubuntu 16.04 LTS 64-bits)
 
 1. Install lampp (abbreviation for Linux-Apache-MySql-Php-Perl) on a linux system.
    Download from https://www.apachefriends.org/download.html.
