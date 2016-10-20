@@ -4,7 +4,7 @@ Note: It's easiest to read this file in "raw" mode, since otherwise the formatti
 
 # SETUP ON A NEW SYSTEM
 
-1. Install lampp on a linux system (https://www.apachefriends.org/download.html).
+1. Install lampp (abbreviation for Linux-Apache-MySql-Php-Perl) on a linux system (https://www.apachefriends.org/download.html).
 2. Configure lampp to run CGI scripts by changing /opt/lampp/etc/httpd.conf.
    It should say `Options ExecCGI` in the `<Directory "/opt/lampp/cgi-bin">` section.
 3. Start Apache with `sudo /opt/lampp/lampp startapache`.
