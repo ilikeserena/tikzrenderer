@@ -58,7 +58,7 @@ Note: It's easiest to read this file in "raw" mode, since otherwise the formatti
    Restart Apache with `sudo /opt/lampp/lampp reloadapache`.
    Verify with the previous step (`tikztest.pl`) if .svg images work now.
    
-9. Set up a cron job to get rid of spammy tikz requests.
+9. Set up a cron job to get rid of spammy tikz requests (Ubuntu).
    Create /etc/cron.hourly/cleanup_tikz with contents:
 ```bash
     #!/bin/bash
