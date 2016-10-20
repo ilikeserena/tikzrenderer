@@ -14,7 +14,11 @@ Note: It's easiest to read this file in "raw" mode, since otherwise the formatti
 4. Install the tikz renderer functionality with: 
 ```bash
    cd /opt/lampp/cgi-bin
+   sudo tar czpf ../cgi.tgz *
+   sudo rm -rf *
    sudo git clone https://github.com/ilikeserena/tikzrenderer.git ./
+   sudo tar xzfg ../cgi.tgz
+   sudo rm ../cgi.tgz
 ```
 5. Create relevant directories, copy .png files, and set permissions:
 ```bash
