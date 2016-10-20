@@ -14,9 +14,12 @@ Note: It's easiest to read this file in "raw" mode, since otherwise the formatti
 4. Install the tikz renderer functionality with: 
 ```bash
    cd /opt/lampp/cgi-bin
+   # Save whatever's there
    sudo tar czpf ../cgi.tgz *
    sudo rm -rf *
+   # Retrieve the tikz renderer functionality
    sudo git clone https://github.com/ilikeserena/tikzrenderer.git ./
+   # Restore what we saved before
    sudo tar xzfg ../cgi.tgz
    sudo rm ../cgi.tgz
 ```
