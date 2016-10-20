@@ -57,11 +57,11 @@
    Restart Apache with `sudo /opt/lampp/lampp reloadapache`.
    Verify with the previous step (`tikztest.pl`) if .svg images work now.
    
-9. Set up a cron job to get rid of spammy tikz requests (Ubuntu).
+9. Set up a cron job to get rid of spammy tikz requests.
    Create `/etc/cron.hourly/cleanup_tikz` with contents:
 ```bash
     #!/bin/bash
-    logger "Running cleanup_tikz"
+    logger "Running cleanup_tikz" # Works on Ubuntu
     find /opt/lampp/htdocs/tikz -name "live_*" -mtime +1 -exec rm {} \;
     find /opt/lampp/htdocs/tikz -name "preview_*" -mtime +1 -exec rm {} \;
 ```
@@ -71,7 +71,7 @@
 ```
    Verify it works by checking `/var/log/syslog` that should show "Running cleanup_tikz" after an hour, which should remove any of the specified files that is at least a day old.
    
-10. Configure to run Apache automatically (Ubuntu)
+10. Configure to run Apache automatically.
 ```bash
     sudo ln -s /opt/lampp/lampp /etc/init.d/lampp
     sudo update-rc.d lampp start 80 3 5 . stop 30 0 1 2 6 .
