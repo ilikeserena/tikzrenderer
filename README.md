@@ -1,15 +1,14 @@
 # tikzrenderer
 
-Note: It's easiest to read this file in "raw" mode, since otherwise the formatting goes haywire.
-
 # SETUP ON A NEW SYSTEM
 
-1. Install lampp (abbreviation for Linux-Apache-MySql-Php-Perl) on a linux system (https://www.apachefriends.org/download.html).
-2. Configure lampp to run CGI scripts by changing /opt/lampp/etc/httpd.conf.
+1. Install lampp (abbreviation for Linux-Apache-MySql-Php-Perl) on a linux system (verified on Ubuntu).
+   Download from https://www.apachefriends.org/download.html.
+2. Configure lampp to run CGI scripts by changing `/opt/lampp/etc/httpd.conf`.
    It should say `Options ExecCGI` in the `<Directory "/opt/lampp/cgi-bin">` section.
 3. Start Apache with `sudo /opt/lampp/lampp startapache`.
    Verify Apache works by entering "http://localhost" in the address bar of a web browser.
-   Verify CGI works by following the directions in cgi-bin/test-cgi
+   Verify CGI works by following the directions in `cgi-bin/test-cgi`
    and entering "http://localhost/cgi-bin/test-cgi" in the address bar of a web browser.
 4. Install the tikz renderer functionality with: 
 ```bash
@@ -39,7 +38,7 @@ Note: It's easiest to read this file in "raw" mode, since otherwise the formatti
    sudo apt install lacheck
 ```
 7. Verify installation with the following address in a web browser:
-   http://localhost/cgi-bin/tikztest.pl
+   http://localhost/cgi-bin/tikztest.pl.
    It should show a page in which you can enter a tikz picture and submit it.
    For instance:
 ```latex
@@ -49,7 +48,7 @@ Note: It's easiest to read this file in "raw" mode, since otherwise the formatti
 ```
    As a result we should see a .png image and a .svg image (see next item if SVG does not work).
    
-8. Add support for SVG to the web server if it doesn't work:
+8. Add support for SVG to the web server if it doesn't work.
    Edit /opt/lampp/etc/httpd.conf and add in the `<IfModule mime_module>` section:
 ```
     AddType image/svg+xml svg svgz
@@ -59,7 +58,7 @@ Note: It's easiest to read this file in "raw" mode, since otherwise the formatti
    Verify with the previous step (`tikztest.pl`) if .svg images work now.
    
 9. Set up a cron job to get rid of spammy tikz requests (Ubuntu).
-   Create /etc/cron.hourly/cleanup_tikz with contents:
+   Create `/etc/cron.hourly/cleanup_tikz` with contents:
 ```bash
     #!/bin/bash
     logger "Running cleanup_tikz"
@@ -70,7 +69,7 @@ Note: It's easiest to read this file in "raw" mode, since otherwise the formatti
 ```bash
     sudo chmod a+x /etc/cron.hourly/cleanup_tikz
 ```
-   Verify it works by checking /var/log/syslog that should show "Running cleanup_tikz" after an hour, which should remove any of the specified files that is at least a day old.
+   Verify it works by checking `/var/log/syslog` that should show "Running cleanup_tikz" after an hour, which should remove any of the specified files that is at least a day old.
    
 10. Configure to run Apache automatically (Ubuntu)
 ```bash
