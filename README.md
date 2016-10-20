@@ -70,7 +70,7 @@ Note: It's easiest to read this file in "raw" mode, since otherwise the formatti
 ```bash
     sudo chmod a+x /etc/cron.hourly/cleanup_tikz
 ```
-   Verify it works by checking /var/log/syslog that should show "Running cleanup_tikz" after an hour.
+   Verify it works by checking /var/log/syslog that should show "Running cleanup_tikz" after an hour, which should remove any of the specified files that is at least a day old.
    
 10. Configure to run Apache automatically (Ubuntu)
 ```bash
