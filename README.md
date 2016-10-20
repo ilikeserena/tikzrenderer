@@ -31,7 +31,7 @@ Note: It's easiest to read this file in "raw" mode, since otherwise the formatti
    sudo cp /opt/lampp/cgi-bin/*.png tikz/
    sudo chown -R daemon:daemon tikz
 ```
-6. Install TIKZ software:
+6. Install TIKZ software (Ubuntu):
 ```bash
    sudo apt install texlive-latex-base
    sudo apt install texlive-latex-extra
