@@ -6,7 +6,7 @@ Note: It's easiest to read this file in "raw" mode, since otherwise the formatti
 
 1. Install lampp on a linux system (https://www.apachefriends.org/download.html).
 2. Configure lampp to run CGI scripts by changing /opt/lampp/etc/httpd.conf.
-   It should say "Options ExecCGI" in the \<Directory "/opt/lampp/cgi-bin"\> section.
+   It should say `Options ExecCGI` in the `<Directory "/opt/lampp/cgi-bin">` section.
 3. Start Apache with `sudo /opt/lampp/lampp startapache`.
    Verify Apache works by entering "http://localhost" in the address bar of a web browser.
    Verify CGI works by following the directions in cgi-bin/test-cgi
@@ -47,13 +47,13 @@ Note: It's easiest to read this file in "raw" mode, since otherwise the formatti
    As a result we should see a .png image and a .svg image (see next item if SVG does not work).
    
 8. Add support for SVG to the web server if it doesn't work:
-   Edit /opt/lampp/etc/httpd.conf and add in the <IfModule mime_module> section:
+   Edit /opt/lampp/etc/httpd.conf and add in the `<IfModule mime_module>` section:
 ```
     AddType image/svg+xml svg svgz
     AddEncoding gzip svgz
 ```
    Restart Apache with `sudo /opt/lampp/lampp reloadapache`.
-   Verify with the previous step (tikztest.pl) if .svg images work now.
+   Verify with the previous step (`tikztest.pl`) if .svg images work now.
    
 9. Set up a cron job to get rid of spammy tikz requests.
    Create /etc/cron.hourly/cleanup_tikz with contents:
@@ -74,4 +74,4 @@ Note: It's easiest to read this file in "raw" mode, since otherwise the formatti
     sudo ln -s /opt/lampp/lampp /etc/init.d/lampp
     sudo update-rc.d lampp start 80 3 5 . stop 30 0 1 2 6 .
 ```
-   Verify by restarting the machine and checking if the tikztest.pl step still works.
+   Verify by restarting the machine and checking if the `tikztest.pl` step still works.
