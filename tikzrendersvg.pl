@@ -145,7 +145,7 @@ sub renderTikz
 \\usepackage{pgfplots}
 \\pgfplotsset{compat=1.13}
 \\usepackage[outline]{contour}
-\\usetikzlibrary{arrows,automata,positioning,shadows}
+\\usetikzlibrary{arrows,automata,positioning,shadows,patterns}
 \\begin{document}
 
 $tikz
