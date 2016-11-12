@@ -86,6 +86,7 @@ sub executeCmd
     my $stderr_file = shift;
 
     unlink $stderr_file;
+    $cmd = "$cmd </dev/null";
     $cmd = "$cmd 2>$stderr_file" if $stderr_file;
     print "$cmd\n";
     print `$cmd`;
@@ -199,7 +200,7 @@ EOF
 	    print "\n";
 	}
 
-        $success = executeCmd("unset LD_LIBRARY_PATH ; pdflatex -no-shell-escape -interaction=nonstopmode -output-directory $TMP_DIR $tmptexfile"
+        $success = executeCmd("unset LD_LIBRARY_PATH ; pdflatex -no-shell-escape -output-directory $TMP_DIR $tmptexfile"
             , $tmp_pdflatex_stderr) if $success;
 
         $success = executeCmd("unset LD_LIBRARY_PATH ; pdf2svg $tmppdffile $tmpsvgfile"

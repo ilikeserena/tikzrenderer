@@ -12,6 +12,7 @@ use Digest::MD5 qw(md5_hex);
 
 my $XAMPP_DIR = "/opt/lampp";
 my $OUT_DIR = "$XAMPP_DIR/htdocs/tikz";
+my $CGI_DIR = "$XAMPP_DIR/cgi-bin";
 my $TMP_DIR = "$OUT_DIR/tmp";
 
 my $cgi = new CGI;
@@ -73,7 +74,7 @@ if ($success)
 else
 {
     print "Content-Type: text/png\n\n";
-    open(IMG, "$OUT_DIR/error.png") or die "Cannot read from '$OUT_DIR/error.png': $!";
+    open(IMG, "$CGI_DIR/error.png") or die "Cannot read from '$CGI_DIR/error.png': $!";
     print while <IMG>;
     close(IMG);
 }
@@ -85,6 +86,7 @@ sub executeCmd
     my $stderr_file = shift;
 
     unlink $stderr_file;
+    $cmd = "$cmd </dev/null";
     $cmd = "$cmd 2>$stderr_file" if $stderr_file;
     print "$cmd\n";
     print `$cmd`;
@@ -198,7 +200,7 @@ EOF
 	    print "\n";
 	}
 
-        $success = executeCmd("unset LD_LIBRARY_PATH ; pdflatex -no-shell-escape -interaction=nonstopmode -output-directory $TMP_DIR $tmptexfile"
+        $success = executeCmd("unset LD_LIBRARY_PATH ; pdflatex -no-shell-escape -output-directory $TMP_DIR $tmptexfile"
             , $tmp_pdflatex_stderr) if $success;
 
         $success = executeCmd("unset LD_LIBRARY_PATH ; pdf2svg $tmppdffile $tmpsvgfile"

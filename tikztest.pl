@@ -101,7 +101,7 @@ print FH <<EOF;
 \\usepackage{pgfplots}
 \\pgfplotsset{compat=1.13}
 \\usepackage[outline]{contour}
-\\usetikzlibrary{arrows,automata,positioning,shadows}
+\\usetikzlibrary{arrows,automata,positioning,shadows,patterns}
 \\begin{document}
 
 $tikz
@@ -110,7 +110,7 @@ $tikz
 EOF
 	close FH;
 
-	$success = executeCmd("unset LD_LIBRARY_PATH ; pdflatex --shell-escape -file-line-error -interaction=nonstopmode -output-directory $TMP_DIR $tmptexfile"
+	$success = executeCmd("unset LD_LIBRARY_PATH ; pdflatex --no-shell-escape -output-directory $TMP_DIR $tmptexfile"
 			, $tmp_pdflatex_stderr);
 
 	$success = executeCmd("unset LD_LIBRARY_PATH ; pdf2svg $tmppdffile $tmpsvgfile"
@@ -193,6 +193,7 @@ sub executeCmd
     my $stderr_file = shift;
 
     unlink $stderr_file;
+    $cmd = "$cmd </dev/null";
     $cmd = "$cmd 2>$stderr_file" if $stderr_file;
     print "$cmd\n";
     print `$cmd`;
