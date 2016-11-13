@@ -18,9 +18,7 @@ my $tikz = $cgi->param( 'tikz' ) || '';
 
 my ($s,$us) = gettimeofday();
 my $tikzForMd5 = $tikz;
-$tikzForMd5 =~ s#%[^\n]*##gm;
-$tikzForMd5 =~ s#[\s\r\n]+# #gm;
-$tikzForMd5 =~ s#^\s*(.*?)\s*$#$1#;
+$tikzForMd5 =~ s#^\s*([\s\S]*)\s*$#$1#m;
 my $document = "tikztest_" . md5_hex($tikzForMd5);
 print "DOC: $document\n";
 my $tmptexfile = "$TMP_DIR/$document.tex";
@@ -96,12 +94,19 @@ else
 print FH <<EOF;
 \\documentclass[border=10pt,tikz,x11names]{standalone}
 \\usepackage{amsmath}
-\\usepackage{sansmath} %for the sans serif font
+\\usepackage{sansmath}
 \\usepackage{tikz}
 \\usepackage{pgfplots}
 \\pgfplotsset{compat=1.13}
 \\usepackage[outline]{contour}
 \\usetikzlibrary{arrows,automata,positioning,shadows,patterns}
+
+% Protect pdflatex from hanging when we have a pending '[' after begin{tikzpicture}
+% See: http://tex.stackexchange.com/questions/338869/pdflatex-hangs-on-a-pending
+\\makeatletter
+\\protected\\def\\tikz\@signal\@path{\\tikz\@signal\@path}%
+\\makeatother
+
 \\begin{document}
 
 $tikz
@@ -110,7 +115,7 @@ $tikz
 EOF
 	close FH;
 
-	$success = executeCmd("unset LD_LIBRARY_PATH ; pdflatex --no-shell-escape -output-directory $TMP_DIR $tmptexfile"
+	$success = executeCmd("unset LD_LIBRARY_PATH ; pdflatex -no-shell-escape -halt-on-error -file-line-error -output-directory $TMP_DIR $tmptexfile"
 			, $tmp_pdflatex_stderr);
 
 	$success = executeCmd("unset LD_LIBRARY_PATH ; pdf2svg $tmppdffile $tmpsvgfile"
@@ -166,9 +171,12 @@ EOF
 }
 
 my $tikzArg = $tikz;
-$tikzArg =~ s#[\s\r\n]+# #g;
-$tikzArg =~ s#\\#\\\\#g;
+$tikzArg =~ s#\r##mg;
+$tikzArg =~ s#\\#\\\\#mg;
 $tikzArg =~ s#'#\\'#g;
+$tikzArg =~ s#\n#\\n#g;
+$tikzArg =~ s#^\s+##;
+$tikzArg =~ s#\s+$##;
 print <<EOF;
 <script>
   var text = encodeURIComponent('$tikzArg');

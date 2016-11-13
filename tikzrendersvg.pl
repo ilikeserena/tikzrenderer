@@ -15,28 +15,41 @@ my $OUT_DIR = "$XAMPP_DIR/htdocs/tikz";
 my $CGI_DIR = "$XAMPP_DIR/cgi-bin";
 my $TMP_DIR = "$OUT_DIR/tmp";
 
+my $PREAMBLE = <<'EOF';
+\documentclass[border=10pt,tikz,x11names]{standalone}
+\usepackage{amsmath}
+\usepackage{sansmath}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.13}
+\usepackage[outline]{contour}
+\usetikzlibrary{arrows,automata,positioning,shadows,patterns}
+
+% Protect pdflatex from hanging when we have a pending '[' after begin{tikzpicture}
+% See: http://tex.stackexchange.com/questions/338869/pdflatex-hangs-on-a-pending
+\makeatletter
+\protected\def\tikz@signal@path{\tikz@signal@path}%
+\makeatother
+
+\begin{document}
+EOF
+my $POSTAMBLE = <<'EOF';
+
+\end{document}
+EOF
+
 my $cgi = new CGI;
 my $tikz = $cgi->param('tikz') || '';
 my $context = $cgi->param('context') || '';
 
 my ($s,$us) = gettimeofday();
-my $tikzForMd5 = $tikz;
-$tikzForMd5 =~ s#%[^\n]*##gm;
-$tikzForMd5 =~ s#[\s\r\n]+# #gm;
-$tikzForMd5 =~ s#^\s*(.*?)\s*$#$1#;
-my $document = md5_hex($tikzForMd5);
+$tikz =~ s#\r##gm;
+$tikz =~ s#^\s*(.*?)\s*\z#$1#m;
+my $document = md5_hex($tikz);
 $document = "${context}_${document}" if $context;
 
 my $logfile = "$TMP_DIR/$document.cgi.log";
-my $tmptexfile = "$TMP_DIR/$document.tex";
-my $tmppdffile = "$TMP_DIR/$document.pdf";
-my $tmp_lacheck_stderr = "$TMP_DIR/$document.lacheck.stderr";
-my $tmp_pdflatex_stderr = "$TMP_DIR/$document.pdflatex.stderr";
-my $tmp_pdf2svg_stderr = "$TMP_DIR/$document.pdf2svg.stderr";
-my $tmp_convert_stderr = "$TMP_DIR/$document.convert.stderr";
-my $tmppngfile = "$TMP_DIR/$document.png";
-my $tmpsvgfile = "$TMP_DIR/$document.svg";
-my $pngfile = "$OUT_DIR/$document.png";
+my $texfile = "$OUT_DIR/$document.tex";
 my $svgfile = "$OUT_DIR/$document.svg";
 
 open my $LOG, ">$logfile" or die "Cannot open '$logfile' for writing: $!";
@@ -116,22 +129,100 @@ sub executeCmd
     return (($exitcode == 0) and not -s $stderr_file);
 }
 
+
+sub generateLatexError
+    {
+        my $document = shift;
+        my $error_file = shift;
+        my $error_texfile = "$OUT_DIR/$document.error.tex";
+        my $success = 1;
+        print "Writing '$error_texfile' with contents of '$error_file' to render the given errors\n";
+	if (!open(my $FH, '>:encoding(UTF-8)', $error_texfile))
+	{
+	    $success = 0;
+	    print("Cannot write to '$error_texfile': $!\n");
+	}
+	else
+	{
+	    print $FH "\\documentclass[border=10pt, preview]{standalone}\n";
+	    print $FH "\\begin{document}\n";
+	    open (ERRFH, '<:encoding(UTF-8)', $error_file)
+		or ($success = 0, print("Could not read file: $!\n"));
+            my $lines_preamble = ($PREAMBLE =~ tr#\n##) + 1;
+            my $found_error = 0;
+	    while (<ERRFH>)
+	    {
+		$found_error = 1 if s/^".*?", line (\d+):/"line ".($1 - $lines_preamble).":"/e;
+		$found_error = 1 if s/^.*?$document.*?:(\d+):/"line ".($1 - $lines_preamble).":"/e;
+                next if not $found_error;
+
+		last if /Here is how much of TeX's memory you used/;
+
+		s/\\/\\textbackslash /g;
+		s/~/\\textasciitilde /g;
+		s/\^/\\textasciicircum /g;
+		s/</\\textless /g;
+		s/>/\\textgreater /g;
+		s/([\$&%#_{}])/\\$1/g;
+		s/(\[)/{$1}/g;	# Handle \\ followed by [ optional length construction
+		s/(\n)/\\\\$1/;
+
+		print $FH $_;
+	    }
+	    close ERRFH;
+	    print $FH "\\end{document}\n";
+	    close $FH;
+
+            print "Could not find line with error\n" if not $found_error;
+            $success = 0 if not $found_error;
+            $success = renderLatex("$document.error", $error_texfile) if $success;
+	}
+        return $success;
+    }
+
+
+sub renderLatex
+{
+        my $document = shift;
+        my $texfile = shift;
+
+        my $success = 1;
+        my $tmp_pdflatex_stderr = "$TMP_DIR/$document.pdflatex.stderr";
+        my $tmp_pdf2svg_stderr = "$TMP_DIR/$document.pdf2svg.stderr";
+        my $tmp_pdffile = "$TMP_DIR/$document.pdf";
+        my $tmp_svgfile = "$TMP_DIR/$document.svg";
+        unlink $tmp_pdflatex_stderr;
+        unlink $tmp_pdf2svg_stderr;
+        unlink $tmp_pdffile;
+        unlink $tmp_svgfile;
+        $success = executeCmd("unset LD_LIBRARY_PATH ; pdflatex -no-shell-escape -halt-on-error -file-line-error -output-directory $TMP_DIR $texfile"
+            , $tmp_pdflatex_stderr) if $success;
+
+        $success = executeCmd("unset LD_LIBRARY_PATH ; pdf2svg $tmp_pdffile $tmp_svgfile"
+                , $tmp_pdf2svg_stderr) if $success;
+
+        if ($success)
+        {
+            print "move($tmp_svgfile, $svgfile)\n";
+            move($tmp_svgfile, $svgfile) or ($success = 0, print("Could not move file: $!\n"));
+
+            print "\n";
+        }
+        return $success;
+}
+
+
 sub renderTikz
 {
     my $success = 1;
 
     # Remove previous files if left behind
-    unlink $pngfile;
     unlink $svgfile;
-    unlink $tmppngfile;
-    unlink $tmpsvgfile;
-    unlink $tmp_pdflatex_stderr;
-    unlink $tmp_convert_stderr;
-
-    if (!open(my $FH, '>:encoding(UTF-8)', $tmptexfile))
+ 
+    if (!open(my $FH, '>:encoding(UTF-8)', $texfile))
     {
         $success = 0;
-        print("Cannot write to '$tmptexfile': $!\n");
+        print("Cannot write to '$texfile': $!\n");
     }
     else
     {
@@ -140,78 +231,37 @@ sub renderTikz
         printf "%s.%06d\n", strftime("%H:%M:%S", localtime($s)), $us;
 
     print $FH <<EOF;
-\\documentclass[border=10pt,tikz,x11names]{standalone}
-\\usepackage{amsmath}
-\\usepackage{sansmath}
-\\usepackage{tikz}
-\\usepackage{pgfplots}
-\\pgfplotsset{compat=1.13}
-\\usepackage[outline]{contour}
-\\usetikzlibrary{arrows,automata,positioning,shadows,patterns}
-\\begin{document}
-
+$PREAMBLE
 $tikz
-
-\\end{document}
+$POSTAMBLE
 EOF
         close $FH;
 
+	my $tmp_lacheck_stderr = "$TMP_DIR/$document.lacheck.stderr";
+	unlink $tmp_lacheck_stderr;
 	if ($success)
 	{
-	    my $cmd = "unset LD_LIBRARY_PATH ; lacheck $tmptexfile >$tmp_lacheck_stderr 2>&1";
+	    my $cmd = "unset LD_LIBRARY_PATH ; lacheck $texfile >$tmp_lacheck_stderr 2>&1";
 	    print "$cmd\n";
 	    print `$cmd`;
 	    $success = (($? == 0) and not -s $tmp_lacheck_stderr);
 	    print `cat $tmp_lacheck_stderr`;
-	    if (0)
-	    {
-	        print "Replacing content in '$tmptexfile' by '$tmp_lacheck_stderr' to render the given errors\n";
-		if (!open(my $FH, '>:encoding(UTF-8)', $tmptexfile))
-		{
-		    $success = 0;
-		    print("Cannot write to '$tmptexfile': $!\n");
-		}
-		else
-		{
-		    print $FH "\\documentclass[border=10pt, preview]{standalone}\n";
-		    print $FH "\\begin{document}\n";
-		    open (ERRFH, '<:encoding(UTF-8)', $tmp_lacheck_stderr)
-			or ($success = 0, print("Could not read file: $!\n"));
-		    while (<ERRFH>)
-		    {
-			# TODO: Subtract nr lines preamble properly
-			s/^".*?", line (\d+)/"line ".($1 - 10)/e;
-			s/\\/\\textbackslash /g;
-			s/~/\\textasciitilde /g;
-			s/\^/\\textasciicircum /g;
-			s/</\\textless /g;
-			s/>/\\textgreater /g;
-			s/([\$&%#_{}])/\\$1/g;
-			s/(\n)/\\\\$1/;
-			print $FH $_;
-		    }
-		    close ERRFH;
-		    print $FH "\\end{document}\n";
-        	    close $FH;
-		}
-	    }
 	    my ($s,$us) = gettimeofday();
 	    printf "%s.%06d\n", strftime("%H:%M:%S", localtime($s)), $us;
 	    print "\n";
 	}
 
-        $success = executeCmd("unset LD_LIBRARY_PATH ; pdflatex -no-shell-escape -output-directory $TMP_DIR $tmptexfile"
-            , $tmp_pdflatex_stderr) if $success;
-
-        $success = executeCmd("unset LD_LIBRARY_PATH ; pdf2svg $tmppdffile $tmpsvgfile"
-                , $tmp_pdf2svg_stderr) if $success;
-
-        if ($success)
+        if (-s $tmp_lacheck_stderr)
+	{
+	    $success = generateLatexError($document, $tmp_lacheck_stderr);
+ 	}
+        elsif ($success)
         {
-            print "move($tmpsvgfile, $svgfile)\n";
-            move($tmpsvgfile, $svgfile) or ($success = 0, print("Could not move file: $!\n"));
-
-            print "\n";
+            $success = renderLatex($document, $texfile);
+            if (!$success && -s "$TMP_DIR/$document.log")
+	    {
+	        $success = generateLatexError($document, "$TMP_DIR/$document.log");
+ 	    }
         }
 
         ($s,$us) = gettimeofday();
