@@ -4,11 +4,13 @@ use strict;
 use warnings;
 
 use CGI;
-use CGI::Carp qw( fatalsToBrowser );
+use CGI::Carp qw(fatalsToBrowser);
 use File::Copy qw(copy move);
 use Time::HiRes qw(gettimeofday);
 use POSIX qw(strftime);
 use Digest::MD5 qw(md5_hex);
+
+undef $/;
 
 my $XAMPP_DIR = "/opt/lampp";
 my $OUT_DIR = "$XAMPP_DIR/htdocs/tikz";
@@ -42,7 +44,6 @@ my $cgi = new CGI;
 my $tikz = $cgi->param('tikz') || '';
 my $context = $cgi->param('context') || '';
 
-my ($s,$us) = gettimeofday();
 $tikz =~ s#\r##gm;
 $tikz =~ s#^\s*(.*?)\s*\z#$1#m;
 my $document = md5_hex($tikz);
@@ -98,13 +99,13 @@ sub executeCmd
     my $cmd = shift;
     my $stderr_file = shift;
 
-    unlink $stderr_file;
+    unlink $stderr_file if $stderr_file;
     $cmd = "$cmd </dev/null";
     $cmd = "$cmd 2>$stderr_file" if $stderr_file;
     print "$cmd\n";
     print `$cmd`;
     my $exitcode = $?;
-    print "STDERR: ", `cat $stderr_file` if -s $stderr_file;
+    print "STDERR: ", `cat $stderr_file` if $stderr_file and -s $stderr_file;
  
     if ($exitcode == -1)
     {
@@ -120,13 +121,11 @@ sub executeCmd
         printf "EXITSTATUS: command exited with value %d\n", $exitcode >> 8;
     }
 
-    print "Failure due to output on STDERR\n" if ($exitcode == 0) and -s $stderr_file;
+    print "Failure due to output on STDERR\n" if ($exitcode == 0) and $stderr_file and -s $stderr_file;
 
-    my ($s,$us) = gettimeofday();
-    printf "%s.%06d\n", strftime("%H:%M:%S", localtime($s)), $us;
-    print "\n";
+    printTimestamp();
 
-    return (($exitcode == 0) and not -s $stderr_file);
+    return (($exitcode == 0) and (not $stderr_file or not -s $stderr_file));
 }
 
 
@@ -212,6 +211,14 @@ sub renderLatex
 }
 
 
+sub printTimestamp
+{
+    my ($s,$us) = gettimeofday();
+    printf "%s.%06d\n", strftime("%H:%M:%S", localtime($s)), $us;
+    print "\n";
+}
+
+
 sub renderTikz
 {
     my $success = 1;
@@ -226,11 +233,11 @@ sub renderTikz
     }
     else
     {
-        ($s,$us) = gettimeofday();
+        my ($s,$us) = gettimeofday();
         my $time_start = $s + $us / 1e6;
-        printf "%s.%06d\n", strftime("%H:%M:%S", localtime($s)), $us;
+        printTimestamp();
 
-    print $FH <<EOF;
+        print $FH <<EOF;
 $PREAMBLE
 $tikz
 $POSTAMBLE
@@ -238,17 +245,24 @@ EOF
         close $FH;
 
 	my $tmp_lacheck_stderr = "$TMP_DIR/$document.lacheck.stderr";
-	unlink $tmp_lacheck_stderr;
-	if ($success)
+        $success = executeCmd("unset LD_LIBRARY_PATH ; lacheck $texfile 2>$tmp_lacheck_stderr 1>&2") if $success;
+        $success = 0 if -s $tmp_lacheck_stderr;
+	if (not $success and -s $tmp_lacheck_stderr)
 	{
-	    my $cmd = "unset LD_LIBRARY_PATH ; lacheck $texfile >$tmp_lacheck_stderr 2>&1";
-	    print "$cmd\n";
-	    print `$cmd`;
-	    $success = (($? == 0) and not -s $tmp_lacheck_stderr);
-	    print `cat $tmp_lacheck_stderr`;
-	    my ($s,$us) = gettimeofday();
-	    printf "%s.%06d\n", strftime("%H:%M:%S", localtime($s)), $us;
-	    print "\n";
+	    # Filter out false positives
+            open(my $fh, "<:encoding(UTF-8)", $tmp_lacheck_stderr)
+                 or die "Can't open '$tmp_lacheck_stderr' for reading: $!";
+            $_ = <$fh>;
+            close $fh;
+            if (s#^(.*Dots should be \\ldots.*)\n##gm)
+            {
+                print "Found false positive: $1\n\n";
+                $success = 1;
+            }
+            open($fh, ">:encoding(UTF-8)", $tmp_lacheck_stderr)
+                 or die "Can't open '$tmp_lacheck_stderr' for writing: $!";
+            print $fh;
+            close $fh;
 	}
 
         if (-s $tmp_lacheck_stderr)
@@ -266,7 +280,7 @@ EOF
 
         ($s,$us) = gettimeofday();
         my $time_stop = $s + $us / 1e6;
-        printf "%s.%06d\n", strftime("%H:%M:%S", localtime($s)), $us;
+        printTimestamp();
         printf "Total rendering time=%.4f s\n", ($time_stop - $time_start);
     }
 
