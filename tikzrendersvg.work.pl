@@ -149,10 +149,13 @@ sub generateLatexError
 		or ($success = 0, print("Could not read file: $!\n"));
             my $lines_preamble = ($PREAMBLE =~ tr#\n##) + 1;
             my $found_error = 0;
-	    while (<ERRFH>)
+	    my $content = <ERRFH>;
+	    close ERRFH;
+	    while ($content =~ s#^(.*\n)##)
 	    {
-		$found_error = 1 if s/^".*?", line (\d+):/"line ".($1 - $lines_preamble).":"/e;
-		$found_error = 1 if s/^.*?$document.*?:(\d+):/"line ".($1 - $lines_preamble).":"/e;
+		$_ = $1;
+                $found_error = 1 if s/^".*?", line (\d+):/"line ".($1 - $lines_preamble).":"/e;
+                $found_error = 1 if s/^.*?$document.*?:(\d+):/"line ".($1 - $lines_preamble).":"/e;
                 next if not $found_error;
 
 		last if /Here is how much of TeX's memory you used/;
@@ -168,7 +171,6 @@ sub generateLatexError
 
 		print $FH $_;
 	    }
-	    close ERRFH;
 	    print $FH "\\end{document}\n";
 	    close $FH;
 
@@ -249,19 +251,20 @@ EOF
         $success = 0 if -s $tmp_lacheck_stderr;
 	if (not $success and -s $tmp_lacheck_stderr)
 	{
+            print "Checking '$tmp_lacheck_stderr' with size ".(-s $tmp_lacheck_stderr)."\n";
 	    # Filter out false positives
             open(my $fh, "<:encoding(UTF-8)", $tmp_lacheck_stderr)
                  or die "Can't open '$tmp_lacheck_stderr' for reading: $!";
-            $_ = <$fh>;
+            my $content = <$fh>;
             close $fh;
-            if (s#^(.*Dots should be \\ldots.*)\n##gm)
+            if ($content =~ s#^(.*Dots should be \\ldots.*)\n##gm)
             {
                 print "Found false positive: $1\n\n";
                 $success = 1;
             }
             open($fh, ">:encoding(UTF-8)", $tmp_lacheck_stderr)
                  or die "Can't open '$tmp_lacheck_stderr' for writing: $!";
-            print $fh;
+            print $fh $content;
             close $fh;
 	}
 
