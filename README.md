@@ -61,9 +61,12 @@
    Create `/etc/cron.hourly/cleanup_tikz` with contents:
 ```bash
     #!/bin/bash
-    logger "Running cleanup_tikz" # Works on Ubuntu
-    find /opt/lampp/htdocs/tikz -name "live_*" -mtime +1 -exec rm {} \;
-    find /opt/lampp/htdocs/tikz -name "preview_*" -mtime +1 -exec rm {} \;
+    logger "Running cleanup_tikz"
+    find /opt/lampp/htdocs/tikz/tmp -mtime +0 -exec rm {} \;
+    find /opt/lampp/htdocs/tikz -name "live_*" -mtime +0 -exec rm {} \;
+    find /opt/lampp/htdocs/tikz -name "preview_*" -mtime +0 -exec rm {} \;
+    find /opt/lampp/htdocs/tikz -name "work_*" -mtime +0 -exec rm {} \;
+    find /opt/lampp/htdocs/tikz -name "tikztest_*" -mtime +0 -exec rm {} \;
 ```
    Set permissions with:
 ```bash
