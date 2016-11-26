@@ -1,7 +1,7 @@
 <html>
 <head>
 	<title>PHP TikZ test</title>
-	<script type="text/javascript" src="clientscript/jquery/jquery-1.6.4.min.js"></script>
+	<script type="text/javascript" src="jquery-1.6.4.min.js"></script>
 </head>
 <body>
   <p>rendersvg:<br/><img id="rendersvg" src=""></img></p>
@@ -36,14 +36,14 @@ function doneTyping () {
 	console.log('doneTyping->renderrequest');
 	var tikzUri = $('#tikz').val();
 	tikzUri = encodeURIComponent(tikzUri);
-	$('#rendersvg').attr('src', 'http://ec2-35-164-73-255.us-west-2.compute.amazonaws.com/cgi-bin/tikzrendersvg.pl?context=live&tikz=' + tikzUri);
+	$('#rendersvg').attr('src', 'http://35.164.211.156/cgi-bin/tikzrendersvg.pl?context=live&tikz=' + tikzUri);
 }
 
 {
 	console.log('initial renderrequest');
 	var tikzUri = $('#tikz').val();
 	tikzUri = encodeURIComponent(tikzUri);
-	$('#rendersvg').attr('src', 'http://ec2-35-164-73-255.us-west-2.compute.amazonaws.com/cgi-bin/tikzrendersvg.pl?context=live&tikz=' + tikzUri);
+	$('#rendersvg').attr('src', 'http://35.164.211.156/cgi-bin/tikzrendersvg.pl?context=live&tikz=' + tikzUri);
 }
 
 
@@ -84,7 +84,7 @@ $('#rendersvg').each(function(){
 	if (!file_exists($serversvgfile))
 	{
 		$tikzUri = urlencode($tikz);
-		$content = file_get_contents("http://ec2-35-164-73-255.us-west-2.compute.amazonaws.com/cgi-bin/tikzrendersvg.pl?tikz=$tikzUri");
+		$content = file_get_contents("http://35.164.211.156/cgi-bin/tikzrendersvg.pl?tikz=$tikzUri");
 		file_put_contents($serversvgfile, $response);
 	}
 ?>

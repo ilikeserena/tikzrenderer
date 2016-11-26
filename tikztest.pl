@@ -180,7 +180,7 @@ print <<EOF;
 <script>
   var text = encodeURIComponent('$tikzArg');
   var rendersvgImg = document.getElementById('rendersvg');
-  rendersvgImg.src = 'http://ec2-35-164-73-255.us-west-2.compute.amazonaws.com/cgi-bin/tikzrendersvg.work.pl?context=work&tikz=' + text;
+  rendersvgImg.src = 'http://35.164.211.156/cgi-bin/tikzrendersvg.work.pl?context=work&tikz=' + text;
 </script>
 EOF
 
