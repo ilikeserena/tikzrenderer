@@ -97,7 +97,6 @@ print FH <<EOF;
 \\usepackage{sansmath}
 \\usepackage{tikz}
 \\usepackage{pgfplots}
-\\usepackage[outline]{contour}
 \\usetikzlibrary{arrows,automata,positioning,shadows,patterns}
 
 % Protect pdflatex from hanging when we have a pending '[' after begin{tikzpicture}
