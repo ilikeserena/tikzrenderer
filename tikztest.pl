@@ -92,7 +92,7 @@ else
 	printf "%s.%06d\n", strftime("%H:%M:%S", localtime($s)), $us;
 
 print FH <<EOF;
-\\documentclass[border=10pt,tikz,x11names]{standalone}
+\\documentclass[border=10pt]{standalone}
 \\usepackage{amsmath}
 \\usepackage{sansmath}
 \\usepackage{tikz}
@@ -181,7 +181,7 @@ print <<EOF;
 <script>
   var text = encodeURIComponent('$tikzArg');
   var rendersvgImg = document.getElementById('rendersvg');
-  rendersvgImg.src = 'http://94.208.84.50:3080/cgi-bin/tikzrendersvg.work.pl?context=work&tikz=' + text;
+  rendersvgImg.src = 'http://217.104.66.241:3080/cgi-bin/tikzrendersvg.work.pl?context=work&tikz=' + text;
 </script>
 EOF
 
