@@ -23,7 +23,6 @@ my $PREAMBLE = <<'EOF';
 \usepackage{sansmath}
 \usepackage{tikz}
 \usepackage{pgfplots}
-\pgfplotsset{compat=1.13}
 \usepackage[outline]{contour}
 \usetikzlibrary{arrows,automata,patterns,positioning,shadows}
 
