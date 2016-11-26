@@ -97,7 +97,6 @@ print FH <<EOF;
 \\usepackage{sansmath}
 \\usepackage{tikz}
 \\usepackage{pgfplots}
-\\pgfplotsset{compat=1.13}
 \\usepackage[outline]{contour}
 \\usetikzlibrary{arrows,automata,positioning,shadows,patterns}
 
@@ -181,7 +180,7 @@ print <<EOF;
 <script>
   var text = encodeURIComponent('$tikzArg');
   var rendersvgImg = document.getElementById('rendersvg');
-  rendersvgImg.src = 'http://94.208.84.50:3080/cgi-bin/tikzrendersvg.work.pl?context=work&tikz=' + text;
+  rendersvgImg.src = 'http://ec2-35-164-73-255.us-west-2.compute.amazonaws.com:80/cgi-bin/tikzrendersvg.work.pl?context=work&tikz=' + text;
 </script>
 EOF
 
