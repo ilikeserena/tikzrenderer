@@ -36,6 +36,7 @@
    sudo apt install texlive-latex-extra
    sudo apt install pdf2svg
    sudo apt install lacheck
+   sudo apt install imagemagick
 ```
 7. Verify installation with the following address in a web browser:
    http://localhost/cgi-bin/tikztest.pl.
