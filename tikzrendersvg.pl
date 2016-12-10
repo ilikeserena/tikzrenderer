@@ -128,86 +128,86 @@ sub executeCmd
 
 
 sub generateLatexError
+{
+    my $document = shift;
+    my $error_file = shift;
+    my $error_texfile = "$OUT_DIR/$document.error.tex";
+    my $success = 1;
+    print "Writing '$error_texfile' with contents of '$error_file' to render the given errors\n";
+    if (!open(my $FH, '>:encoding(UTF-8)', $error_texfile))
     {
-        my $document = shift;
-        my $error_file = shift;
-        my $error_texfile = "$OUT_DIR/$document.error.tex";
-        my $success = 1;
-        print "Writing '$error_texfile' with contents of '$error_file' to render the given errors\n";
-	if (!open(my $FH, '>:encoding(UTF-8)', $error_texfile))
-	{
-	    $success = 0;
-	    print("Cannot write to '$error_texfile': $!\n");
-	}
-	else
-	{
-	    print $FH "\\documentclass[border=10pt, preview]{standalone}\n";
-	    print $FH "\\begin{document}\n";
-	    open (ERRFH, '<:encoding(UTF-8)', $error_file)
-		or ($success = 0, print("Could not read file: $!\n"));
-            my $lines_preamble = ($PREAMBLE =~ tr#\n##) + 1;
-            my $found_error = 0;
-	    my $content = <ERRFH>;
-	    close ERRFH;
-	    while ($content =~ s#^(.*\n)##)
-	    {
-		$_ = $1;
-                $found_error = 1 if s/^".*?", line (\d+):/"line ".($1 - $lines_preamble).":"/e;
-                $found_error = 1 if s/^.*?$document.*?:(\d+):/"line ".($1 - $lines_preamble).":"/e;
-                next if not $found_error;
-
-		last if /Here is how much of TeX's memory you used/;
-
-		s/\\/\\textbackslash /g;
-		s/~/\\textasciitilde /g;
-		s/\^/\\textasciicircum /g;
-		s/</\\textless /g;
-		s/>/\\textgreater /g;
-		s/([\$&%#_{}])/\\$1/g;
-		s/(\[)/{$1}/g;	# Handle \\ followed by [ optional length construction
-		s/(\n)/\\\\$1/;
-
-		print $FH $_;
-	    }
-	    print $FH "\\end{document}\n";
-	    close $FH;
-
-            print "Could not find line with error\n" if not $found_error;
-            $success = 0 if not $found_error;
-            $success = renderLatex("$document.error", $error_texfile) if $success;
-	}
-        return $success;
+        $success = 0;
+        print("Cannot write to '$error_texfile': $!\n");
     }
+    else
+    {
+        print $FH "\\documentclass[border=10pt, preview]{standalone}\n";
+        print $FH "\\begin{document}\n";
+        open (ERRFH, '<:encoding(UTF-8)', $error_file)
+            or ($success = 0, print("Could not read file: $!\n"));
+        my $lines_preamble = ($PREAMBLE =~ tr#\n##) + 1;
+        my $found_error = 0;
+        my $content = <ERRFH>;
+        close ERRFH;
+        while ($content =~ s#^(.*\n)##)
+        {
+            $_ = $1;
+            $found_error = 1 if s/^".*?", line (\d+):/"line ".($1 - $lines_preamble).":"/e;
+            $found_error = 1 if s/^.*?$document.*?:(\d+):/"line ".($1 - $lines_preamble).":"/e;
+            next if not $found_error;
+
+            last if /Here is how much of TeX's memory you used/;
+
+            s/\\/\\textbackslash /g;
+            s/~/\\textasciitilde /g;
+            s/\^/\\textasciicircum /g;
+            s/</\\textless /g;
+            s/>/\\textgreater /g;
+            s/([\$&%#_{}])/\\$1/g;
+            s/(\[)/{$1}/g;        # Handle \\ followed by [ optional length construction
+            s/(\n)/\\\\$1/;
+
+            print $FH $_;
+        }
+        print $FH "\\end{document}\n";
+        close $FH;
+
+        print "Could not find line with error\n" if not $found_error;
+        $success = 0 if not $found_error;
+        $success = renderLatex("$document.error", $error_texfile) if $success;
+    }
+    return $success;
+}
 
 
 sub renderLatex
 {
-        my $document = shift;
-        my $texfile = shift;
+    my $document = shift;
+    my $texfile = shift;
 
-        my $success = 1;
-        my $tmp_pdflatex_stderr = "$TMP_DIR/$document.pdflatex.stderr";
-        my $tmp_pdf2svg_stderr = "$TMP_DIR/$document.pdf2svg.stderr";
-        my $tmp_pdffile = "$TMP_DIR/$document.pdf";
-        my $tmp_svgfile = "$TMP_DIR/$document.svg";
-        unlink $tmp_pdflatex_stderr;
-        unlink $tmp_pdf2svg_stderr;
-        unlink $tmp_pdffile;
-        unlink $tmp_svgfile;
-        $success = executeCmd("unset LD_LIBRARY_PATH ; pdflatex -no-shell-escape -halt-on-error -file-line-error -output-directory $TMP_DIR $texfile"
-            , $tmp_pdflatex_stderr) if $success;
+    my $success = 1;
+    my $tmp_pdflatex_stderr = "$TMP_DIR/$document.pdflatex.stderr";
+    my $tmp_pdf2svg_stderr = "$TMP_DIR/$document.pdf2svg.stderr";
+    my $tmp_pdffile = "$TMP_DIR/$document.pdf";
+    my $tmp_svgfile = "$TMP_DIR/$document.svg";
+    unlink $tmp_pdflatex_stderr;
+    unlink $tmp_pdf2svg_stderr;
+    unlink $tmp_pdffile;
+    unlink $tmp_svgfile;
+    $success = executeCmd("unset LD_LIBRARY_PATH ; pdflatex -no-shell-escape -halt-on-error -file-line-error -output-directory $TMP_DIR $texfile"
+        , $tmp_pdflatex_stderr) if $success;
 
-        $success = executeCmd("unset LD_LIBRARY_PATH ; pdf2svg $tmp_pdffile $tmp_svgfile"
-                , $tmp_pdf2svg_stderr) if $success;
+    $success = executeCmd("unset LD_LIBRARY_PATH ; pdf2svg $tmp_pdffile $tmp_svgfile"
+            , $tmp_pdf2svg_stderr) if $success;
 
-        if ($success)
-        {
-            print "move($tmp_svgfile, $svgfile)\n";
-            move($tmp_svgfile, $svgfile) or ($success = 0, print("Could not move file: $!\n"));
+    if ($success)
+    {
+        print "move($tmp_svgfile, $svgfile)\n";
+        move($tmp_svgfile, $svgfile) or ($success = 0, print("Could not move file: $!\n"));
 
-            print "\n";
-        }
-        return $success;
+        print "\n";
+    }
+    return $success;
 }
 
 
@@ -244,13 +244,13 @@ $POSTAMBLE
 EOF
         close $FH;
 
-	my $tmp_lacheck_stderr = "$TMP_DIR/$document.lacheck.stderr";
+        my $tmp_lacheck_stderr = "$TMP_DIR/$document.lacheck.stderr";
         $success = executeCmd("unset LD_LIBRARY_PATH ; lacheck $texfile 2>$tmp_lacheck_stderr 1>&2") if $success;
         $success = 0 if -s $tmp_lacheck_stderr;
-	if (not $success and -s $tmp_lacheck_stderr)
-	{
+        if (not $success and -s $tmp_lacheck_stderr)
+        {
             print "Checking '$tmp_lacheck_stderr' with size ".(-s $tmp_lacheck_stderr)."\n";
-	    # Filter out false positives
+            # Filter out false positives
             open(my $fh, "<:encoding(UTF-8)", $tmp_lacheck_stderr)
                  or die "Can't open '$tmp_lacheck_stderr' for reading: $!";
             my $content = <$fh>;
@@ -264,19 +264,19 @@ EOF
                  or die "Can't open '$tmp_lacheck_stderr' for writing: $!";
             print $fh $content;
             close $fh;
-	}
+        }
 
         if (-s $tmp_lacheck_stderr)
-	{
-	    $success = generateLatexError($document, $tmp_lacheck_stderr);
- 	}
+        {
+            $success = generateLatexError($document, $tmp_lacheck_stderr);
+         }
         elsif ($success)
         {
             $success = renderLatex($document, $texfile);
             if (!$success && -s "$TMP_DIR/$document.log")
-	    {
-	        $success = generateLatexError($document, "$TMP_DIR/$document.log");
- 	    }
+            {
+                $success = generateLatexError($document, "$TMP_DIR/$document.log");
+             }
         }
 
         ($s,$us) = gettimeofday();
