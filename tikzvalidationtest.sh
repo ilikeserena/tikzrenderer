@@ -86,6 +86,7 @@ TEST GIVEN_pgfplots_function_example_WHEN_tikzrendersvg_THEN_example_renders '
 
 TEST GIVEN_automata_example_WHEN_tikzrendersvg_THEN_example_renders '
 \begin{tikzpicture}[shorten >=1pt,node distance=2cm,auto]
+  %preamble \usetikzlibrary{automata}
   \node[state,initial]    (q_0)                {$q_0$};
   \node[state,accepting]  (q_1) [right of=q_0] {$q_1$};
 
@@ -95,6 +96,8 @@ TEST GIVEN_automata_example_WHEN_tikzrendersvg_THEN_example_renders '
 
 TEST GIVEN_draw_hyperbola_example_WHEN_tikzrendersvg_THEN_example_renders '
 \begin{tikzpicture}
+%preamble \usepackage{amsmath}
+%preamble \usetikzlibrary{arrows}
 \draw[gray!50, very thin,-triangle 60] (-4,0) -- (4,-0); % x-axis
 \draw[gray!50, very thin,-triangle 60] (0,-3) -- (0,3);  % y-axis
 \draw[gray!50, very thin] (-2,-1.5) rectangle (2,1.5);
@@ -153,6 +156,7 @@ TEST GIVEN_draw_astronomical_example_WHEN_tikzrendersvg_THEN_example_renders '
 # Validate MarkFL's TikZ Examples
 TEST GIVEN_draw_Sudoku_3D_cube_WHEN_tikzrendersvg_THEN_example_renders '
 \begin{tikzpicture}[every node/.style={minimum size=1cm},on grid]
+        %preamble \usetikzlibrary{positioning}
 	\begin{scope}[every node/.append style={yslant=-0.5},yslant=-0.5]
 		\shade[right color=gray!10, left color=black!50] (0,0) rectangle +(3,3);
 		\node at (0.5,2.5) {9};
@@ -373,7 +377,9 @@ TEST GIVEN_draw_Parallel_lines_and_related_angles_WHEN_tikzrendersvg_THEN_exampl
 \end{tikzpicture}'
 
 TEST GIVEN_draw_Intersection_of_WHEN_tikzrendersvg_THEN_example_renders '
-\begin{tikzpicture}[
+\begin{tikzpicture}
+        %preamble \usetikzlibrary{arrows}
+        [
 	scale=5,
 	axis/.style={very thick, ->, >=stealth'"'"'},
 	important line/.style={thick},

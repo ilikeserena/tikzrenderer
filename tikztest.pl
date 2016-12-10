@@ -99,10 +99,8 @@ else
 print FH <<EOF;
 \\documentclass[border=10pt]{standalone}
 \\usepackage{amsmath}
-\\usepackage{sansmath}
 \\usepackage{tikz}
 \\usepackage{pgfplots}
-\\usetikzlibrary{arrows,automata,positioning,shadows,patterns}
 
 % Protect pdflatex from hanging when we have a pending '[' after begin{tikzpicture}
 % See: http://tex.stackexchange.com/questions/338869/pdflatex-hangs-on-a-pending
