@@ -1,15 +1,16 @@
 # tikzrenderer
 
-Web server to render TikZ requests as .svg files.
+Web server to render TikZ requests as SVG files.
 See `tikzlive.html` how to embed it as javascript in an html page.
 To see it in action, use:
 ```http
-http://{tikzrendererserver}/tikz/tikzlive.html
+http://mywebserver.com/tikz/tikzlive.html
 ```
 Rendering is implemented by <img> requests of the form:
 ```http
-<img src='http://{tikzrendererserver}/cgi-bin/tikzrendersvg.pl?tikz={tikzUri}'></img>
+<img src='http://mywebserver.com/cgi-bin/tikzrendersvg.pl?tikz={tikzUri}'></img>
 ```
+where `{tikzUri}` is an URI-encoded picture of the form `\begin{tikzpicture} ... \end{tikzpicture}`.
 
 # SETUP (verified on Ubuntu 16.04 LTS 64-bits)
 
