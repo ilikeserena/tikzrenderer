@@ -1,5 +1,16 @@
 # tikzrenderer
 
+Web server to render TikZ requests as .svg files.
+See `tikzlive.html` how to embed it as javascript in an html page.
+To see it in action, use:
+```http
+http://{tikzrendererserver}/tikz/tikzlive.html
+```
+Rendering is implemented by <img> requests of the form:
+```http
+<img src='http://{tikzrendererserver}/cgi-bin/tikzrendersvg.pl?tikz={tikzUri}'></img>
+```
+
 # SETUP (verified on Ubuntu 16.04 LTS 64-bits)
 
 1. Install lampp (abbreviation for Linux-Apache-MySql-Php-Perl) on a linux system.
@@ -59,7 +70,7 @@ sudo apt install imagemagick
    
 8. Add support for SVG to the web server if it doesn't work.
    Edit /opt/lampp/etc/httpd.conf and add in the `<IfModule mime_module>` section:
- ```bash
+ ```text
 AddType image/svg+xml svg svgz
 AddEncoding gzip svgz
 ```
