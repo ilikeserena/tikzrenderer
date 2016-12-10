@@ -44,6 +44,7 @@ my $context = $cgi->param('context') || '';
 
 $tikz =~ s#\r##gm;
 $tikz =~ s#^\s*(.*?)\s*\z#$1#m;
+$PREAMBLE = getPreamble($tikz);
 my $document = md5_hex($tikz);
 $document = "${context}_${document}" if $context;
 
@@ -216,6 +217,41 @@ sub printTimestamp
     my ($s,$us) = gettimeofday();
     printf "%s.%06d\n", strftime("%H:%M:%S", localtime($s)), $us;
     print "\n";
+}
+
+
+sub getPreamble
+{
+    my $content = shift;
+    my $preamble = "";
+    while ($content =~ s#^(.*\n)##)
+    {
+       my $line = $1;
+       if ($line =~ m#^\s*%\s*preamble\s+(.*\n)#)
+       {
+           $preamble .= $1;
+       }
+    }
+    if ($preamble)
+    {
+        return <<EOF;
+\\documentclass[border=10pt]{standalone}
+\\usepackage{tikz}
+$preamble
+
+% Protect pdflatex from hanging when we have a pending '[' after begin{tikzpicture}
+% See: http://tex.stackexchange.com/questions/338869/pdflatex-hangs-on-a-pending
+\\makeatletter
+\\protected\\def\\tikz\@signal\@path{\\tikz\@signal\@path}%
+\\makeatother
+
+\\begin{document}
+EOF
+    }
+    else
+    {
+        return $PREAMBLE;
+    }
 }
 
 

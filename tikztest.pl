@@ -17,6 +17,9 @@ my $cgi = new CGI;
 my $tikz = $cgi->param( 'tikz' ) || '';
 my $server_location = $ENV{'SERVER_NAME'} or die "Can't retrieve 'SERVER_NAME'";
 $server_location .= ":$ENV{'SERVER_PORT'}" if $ENV{'SERVER_PORT'};
+my $script_path = $ENV{'SCRIPT_NAME'} or die "Can't retrieve 'SCRIPT_NAME'";
+my $script_location = $script_path;
+$script_location =~ s#/[^/]*$##;
 
 my ($s,$us) = gettimeofday();
 my $tikzForMd5 = $tikz;
@@ -45,7 +48,7 @@ $initial_png_file = "/tikz/placeholder.png" if ($tikz !~ m#\S#m);
 print <<EOF;
 <html>
 <body>
-<form action="/cgi-bin/tikztest.pl" method="post">
+<form action="$script_path" method="post">
   <p>svg:<br/><img id="svg" src="$initial_png_file"></img></p>
   <p>png:<br/><img id="png" src="$initial_png_file"></img></p>
   <p>rendersvg:<br/><img id="rendersvg" src="$initial_png_file"></img></p>
@@ -181,7 +184,7 @@ print <<EOF;
 <script>
   var text = encodeURIComponent('$tikzArg');
   var rendersvgImg = document.getElementById('rendersvg');
-  rendersvgImg.src = 'http://$server_location/cgi-bin/tikzrendersvg.pl?context=work&tikz=' + text;
+  rendersvgImg.src = 'http://$server_location$script_location/tikzrendersvg.pl?context=work&tikz=' + text;
 </script>
 EOF
 
