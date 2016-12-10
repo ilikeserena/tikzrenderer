@@ -22,13 +22,15 @@
    sudo tar xzpf ../cgi.tgz
    sudo rm ../cgi.tgz
 ```
-5. Create relevant directories, copy .png files, and set permissions:
+5. Create relevant directories, link files, and set permissions:
 ```bash
    cd /opt/lampp/htdocs
    sudo mkdir tikz
    sudo mkdir tikz/tmp
-   sudo cp /opt/lampp/cgi-bin/*.png tikz/
    sudo chown -R daemon:daemon tikz
+
+   cd /opt/lampp/cgi-bin
+   sudo ln *.png *.js tikzlive.html  tikz/
 ```
 6. Install TIKZ software (Ubuntu):
 ```bash
@@ -39,7 +41,7 @@
    sudo apt install imagemagick
 ```
 7. Verify installation with the following address in a web browser:
-   http://localhost/cgi-bin/tikztest.pl.
+   "http://localhost/cgi-bin/tikztest.pl".
    It should show a page in which you can enter a tikz picture and submit it.
    For instance:
 ```latex
@@ -48,6 +50,10 @@
     \end{tikzpicture}
 ```
    As a result we should see a .png image and a .svg image (see next item if SVG does not work).
+
+   Alternatively, we can use:
+   "http://localhost/tikz/tikzlive.html".
+   It should show a live rendered .svg file that is updated whenever you stop typing for about a second.
    
 8. Add support for SVG to the web server if it doesn't work.
    Edit /opt/lampp/etc/httpd.conf and add in the `<IfModule mime_module>` section:

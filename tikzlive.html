@@ -36,14 +36,14 @@ function doneTyping () {
 	console.log('doneTyping->renderrequest');
 	var tikzUri = $('#tikz').val();
 	tikzUri = encodeURIComponent(tikzUri);
-	$('#rendersvg').attr('src', 'http://35.164.211.156/cgi-bin/tikzrendersvg.pl?context=live&tikz=' + tikzUri);
+	$('#rendersvg').attr('src', 'http://' + location.host + '/cgi-bin/tikzrendersvg.pl?context=live&tikz=' + tikzUri);
 }
 
 {
 	console.log('initial renderrequest');
 	var tikzUri = $('#tikz').val();
 	tikzUri = encodeURIComponent(tikzUri);
-	$('#rendersvg').attr('src', 'http://35.164.211.156/cgi-bin/tikzrendersvg.pl?context=live&tikz=' + tikzUri);
+	$('#rendersvg').attr('src', 'http://' + location.host + '/cgi-bin/tikzrendersvg.pl?context=live&tikz=' + tikzUri);
 }
 
 

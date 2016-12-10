@@ -15,6 +15,8 @@ my $TMP_DIR = "$OUT_DIR/tmp";
 
 my $cgi = new CGI;
 my $tikz = $cgi->param( 'tikz' ) || '';
+my $server_location = $ENV{'SERVER_NAME'} or die "Can't retrieve 'SERVER_NAME'";
+$server_location .= ":$ENV{'SERVER_PORT'}" if $ENV{'SERVER_PORT'};
 
 my ($s,$us) = gettimeofday();
 my $tikzForMd5 = $tikz;
@@ -179,7 +181,7 @@ print <<EOF;
 <script>
   var text = encodeURIComponent('$tikzArg');
   var rendersvgImg = document.getElementById('rendersvg');
-  rendersvgImg.src = 'http://35.164.211.156/cgi-bin/tikzrendersvg.work.pl?context=work&tikz=' + text;
+  rendersvgImg.src = 'http://$server_location/cgi-bin/tikzrendersvg.work.pl?context=work&tikz=' + text;
 </script>
 EOF
 
