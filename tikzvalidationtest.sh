@@ -253,6 +253,183 @@ TEST GIVEN_draw_belt_and_pulley_system_WHEN_tikzrendersvg_THEN_example_renders '
 	\draw (\Q-1.8,0) arc (180:165:1.5);
 \end{tikzpicture}'
 
+TEST GIVEN_draw_Escher_Brick_WHEN_tikzrendersvg_THEN_example_renders '
+\begin{tikzpicture}[scale=4.5, line join=bevel]
+	% \a and \b are two macros defining characteristic
+	% dimensions of the impossible brick.
+	\pgfmathsetmacro{\a}{0.18}
+	\pgfmathsetmacro{\b}{1.37}
+
+	\tikzset{%
+		apply style/.code={\tikzset{#1}},
+		brick_edges/.style={thick,draw=black},
+		face_coloura/.style={fill=gray!50},
+		face_colourb/.style={fill=gray!25},
+		face_colourc/.style={fill=gray!90},
+	}
+
+	\foreach \theta/\v/\facestyleone/\facestyletwo in {%
+	0/0/{brick_edges,face_coloura}/{brick_edges,face_colourc},
+	180/-\a/{brick_edges,face_colourb}/{brick_edges,face_colourc}
+	}{
+		\begin{scope}[rotate=\theta,shift={(\v,0)}]
+			\draw[apply style/.expand once=\facestyleone]  		
+			({-.5*\b},{1.5*\a}) --
+			++(\b,0)            --
+			++(-\a,-\a)         --
+			++({-\b+2*\a},0)    --
+			++(0,-{2*\a})       --
+			++(\b,0)            --
+			++(-\a,-\a)         --
+			++(-\b,0)           --
+			cycle;
+			\draw[apply style/.expand once=\facestyletwo] 
+			({.5*\b},{1.5*\a})  --
+			++(0,{-2*\a})       --
+			++(-\a,0)           --
+			++(0,\a)            --
+			cycle;
+		\end{scope}
+	}
+\end{tikzpicture}'
+
+TEST GIVEN_draw_Penrose_Triangle_WHEN_tikzrendersvg_THEN_example_renders '
+\begin{tikzpicture}[scale=1, line join=bevel]
+
+	% \a and \b are two macros defining characteristic
+	% dimensions of the Penrose triangle.		
+	\pgfmathsetmacro{\a}{2.5}
+	\pgfmathsetmacro{\b}{0.9}
+
+	\tikzset{%
+	apply style/.code = {\tikzset{#1}},
+	triangle_edges/.style = {thick,draw=black}
+	}
+
+	\foreach \theta/\facestyle in {%
+	0/{triangle_edges, fill = gray!50},
+	120/{triangle_edges, fill = gray!25},
+	240/{triangle_edges, fill = gray!90}%
+	}{
+		\begin{scope}[rotate=\theta]
+			\draw[apply style/.expand once=\facestyle]
+			({-sqrt(3)/2*\a},{-0.5*\a})                     --
+			++(-\b,0)                                       --
+			({0.5*\b},{\a+3*sqrt(3)/2*\b})                -- % higher point	
+			({sqrt(3)/2*\a+2.5*\b},{-.5*\a-sqrt(3)/2*\b}) -- % rightmost point
+			++({-.5*\b},-{sqrt(3)/2*\b})                    -- % lower point
+			({0.5*\b},{\a+sqrt(3)/2*\b})                  --
+			cycle;
+		\end{scope}
+	}	
+\end{tikzpicture}'
+
+TEST GIVEN_draw_Electric_dipole_moment_in_water_WHEN_tikzrendersvg_THEN_example_renders '
+\begin{tikzpicture}[>=latex,scale=1.3]
+	\shade[ball color=gray!10!] (0,0) coordinate(Hp) circle (.9) ;
+	\shade[ball color=gray!10!] (2,-1.53) coordinate(O) circle (1.62) ;
+	\shade[ball color=gray!10!] (4,0) coordinate(Hm) circle (.9) ;
+	\draw[thick,dashed] (0,0) -- (2,-1.53) -- (4,0) ;
+	\draw[thick] (2,.2) -- (2,1.5) node[right]{$\mathbf{p}$} ;
+	\draw (2.48,-1.2) arc (33:142:.6)  ;
+	\draw (2,-.95) node[above]{$105^{\circ}$} ;
+	\draw (0,.2) node[left]{H$^+$} ;
+	\draw (4,.2) node[right]{H$^-$} ;
+	\draw (2,-1.63) node[below]{O$^{2-}$} ;
+	\foreach \point in {O,Hp,Hm}
+		\fill [black] (\point) circle (2pt) ;
+\end{tikzpicture}'
+
+TEST GIVEN_draw_Parallel_lines_and_related_angles_WHEN_tikzrendersvg_THEN_example_renders '
+\begin{tikzpicture}
+	\draw[fill=yellow] (0,0) -- (60:.75cm) arc (60:180:.75cm);
+	\draw(120:0.4cm) node {$\alpha$};
+
+	\draw[fill=green!30] (0,0) -- (right:.75cm) arc (0:60:.75cm);
+	\draw(30:0.5cm) node {$\beta$};
+
+	\begin{scope}[shift={(60:2cm)}]
+		\draw[fill=green!30] (0,0) -- (180:.75cm) arc (180:240:.75cm);
+		\draw (30:-0.5cm) node {$\gamma$};
+
+		\draw[fill=yellow] (0,0) -- (240:.75cm) arc (240:360:.75cm);
+		\draw (-60:0.4cm) node {$\delta$};
+	\end{scope}
+
+	\begin{scope}[thick]
+		\draw (60:-1cm) node[fill=white] {$E$} -- (60:3cm) node[fill=white] {$F$};
+		\draw[red]                   (-2,0) node[left] {$A$} -- (3,0) 
+											node[right]{$B$};
+		\draw[blue,shift={(60:2cm)}] (-3,0) node[left] {$C$} -- (2,0) 
+											node[right]{$D$};
+		\draw[shift={(60:1cm)},xshift=4cm]
+			node [right,text width=6cm,rounded corners,fill=red!20,inner sep=1ex]
+			{
+				When we assume that $\color{red}AB$ and $\color{blue}CD$ are
+				parallel, I.\,e., ${\color{red}AB} \mathbin{\|} \color{blue}CD$,
+				then $\alpha = \delta$ and $\beta = \gamma$.
+			};
+	\end{scope}
+\end{tikzpicture}'
+
+TEST GIVEN_draw_Intersection_of_WHEN_tikzrendersvg_THEN_example_renders '
+\begin{tikzpicture}[
+	scale=5,
+	axis/.style={very thick, ->, >=stealth'"'"'},
+	important line/.style={thick},
+	dashed line/.style={dashed, thin},
+	pile/.style={thick, ->, >=stealth'"'"', shorten <=2pt, shorten
+	>=2pt},
+	every node/.style={color=black}
+	]
+	% axis
+	\draw[axis] (-0.1,0)  -- (1.1,0) node(xline)[right]
+		{$G\uparrow/T\downarrow$};
+	\draw[axis] (0,-0.1) -- (0,1.1) node(yline)[above] {$E$};
+	% Lines
+	\draw[important line] (.15,.15) coordinate (A) -- (.85,.85)
+		coordinate (B) node[right, text width=5em] {$Y^O$};
+	\draw[important line] (.15,.85) coordinate (C) -- (.85,.15)
+		coordinate (D) node[right, text width=5em] {$\mathit{NX}=x$};
+	% Intersection of lines
+	\fill[red] (intersection cs:
+		first line={(A) -- (B)},
+		second line={(C) -- (D)}) coordinate (E) circle (.4pt)
+		node[above,] {$A$};
+	% The E point is placed more or less randomly
+	\fill[red]  (E) +(-.075cm,-.2cm) coordinate (out) circle (.4pt)
+		node[below left] {$B$};
+	% Line connecting out and ext balances
+	\draw [pile] (out) -- (intersection of A--B and out--[shift={(0:1pt)}]out)
+		coordinate (extbal);
+	\fill[red] (extbal) circle (.4pt) node[above] {$C$};
+	% line connecting out and int balances
+	\draw [pile] (out) -- (intersection of C--D and out--[shift={(0:1pt)}]out)
+		coordinate (intbal);
+	\fill[red] (intbal) circle (.4pt) node[above] {$D$};
+	% line between out og all balanced out :)
+	\draw[pile] (out) -- (E);
+\end{tikzpicture}'
+
+TEST GIVEN_draw_Intersecting_lines_WHEN_tikzrendersvg_THEN_example_renders '
+\begin{tikzpicture}[scale=1.5]
+	% Draw axes
+	\draw [<->,thick] (0,2) node (yaxis) [above] {$y$}
+		|- (3,0) node (xaxis) [right] {$x$};
+	% Draw two intersecting lines
+	\draw (0,0) coordinate (a_1) -- (2,1.8) coordinate (a_2);
+	\draw (0,1.5) coordinate (b_1) -- (2.5,0) coordinate (b_2);
+	% Calculate the intersection of the lines a_1 -- a_2 and b_1 -- b_2
+	% and store the coordinate in c.
+	\coordinate (c) at (intersection of a_1--a_2 and b_1--b_2);
+	% Draw lines indicating intersection with y and x axis. Here we use
+	% the perpendicular coordinate system
+	\draw[dashed] (yaxis |- c) node[left] {$y'"'"'$}
+		-| (xaxis -| c) node[below] {$x'"'"'$};
+	% Draw a dot to indicate intersection point
+	\fill[red] (c) circle (2pt);
+\end{tikzpicture}'
+
 # Use of cached version (performance)
 
 # Protection of used disk size (performance)
