@@ -227,7 +227,7 @@ sub getPreamble
     while ($content =~ s#^(.*\n)##)
     {
        my $line = $1;
-       if ($line =~ m#^\s*%\s*preamble\s+(.*\n)#)
+       if ($line =~ m#^\s*%preamble\s+(.*\n)#)
        {
            $preamble .= $1;
        }
@@ -237,6 +237,7 @@ sub getPreamble
         return <<EOF;
 \\documentclass[border=10pt]{standalone}
 \\usepackage{tikz}
+
 $preamble
 
 % Protect pdflatex from hanging when we have a pending '[' after begin{tikzpicture}
