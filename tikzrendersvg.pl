@@ -297,6 +297,11 @@ EOF
                 print "Found false positive: $1\n\n";
                 $success = 1;
             }
+            if ($content =~ s#^(.*possible unwanted space at "{".*)\n##gm)
+            {
+                print "Found false positive: $1\n\n";
+                $success = 1;
+            }
             open($fh, ">:encoding(UTF-8)", $tmp_lacheck_stderr)
                  or die "Can't open '$tmp_lacheck_stderr' for writing: $!";
             print $fh $content;

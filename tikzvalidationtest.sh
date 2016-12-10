@@ -122,10 +122,10 @@ TEST GIVEN_pgfplots_histogram_example_WHEN_tikzrendersvg_THEN_example_renders '
 		xtick=data,
 		ymin=0 ]
 	\addplot+[
-		hist={bins=10, density},
+		hist={ bins=10, density},
 		fill=blue!20,
 		mark=none,
-	] table[ row sep=\\, y index=0 ] {%
+	] table[ row sep=\\, y index=0 ] {
 		data \\ 565 \\ 786 \\ 870 \\ 923 \\ 948 \\ 951 \\ 964 \\ 968 \\
 		997 \\1007 \\1013 \\1037 \\1040 \\1051 \\1056 \\1080 \\
 		1088 \\1090 \\1102 \\1103 \\1104 \\1120 \\1151 \\1159 \\
