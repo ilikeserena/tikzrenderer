@@ -84,6 +84,7 @@ sudo chmod a+x /etc/cron.hourly/cleanup_tikz
    Verify it works by checking `/var/log/syslog` that should show "Running cleanup_tikz" after an hour, which should remove any of the specified files that is at least a day old.
    
 10. Configure to run Apache automatically.
+    The following procedure appears to be outdated, but it worked for me.
  ```bash
 sudo ln -s /opt/lampp/lampp /etc/init.d/lampp
 sudo update-rc.d lampp start 80 3 5 . stop 30 0 1 2 6 .
