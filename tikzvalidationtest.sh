@@ -444,3 +444,7 @@ TEST GIVEN_draw_Intersecting_lines_WHEN_tikzrendersvg_THEN_example_renders '
 
 # Validate tikztest.pl
 
+# Clean up if we get here
+sudo find /opt/lampp/htdocs/tikz -name "test_*" -exec rm {} \;
+[ -d out/ ] && rm -r out/
+
