@@ -40,19 +40,21 @@ TEST GIVEN_lacheck_error_WHEN_tikzrendersvg_THEN_lacheck_error \
 TEST GIVEN_lacheck_dots_error_WHEN_tikzrendersvg_THEN_dots_render \
     '\begin{tikzpicture} \foreach \x in {1,...,3} \draw (\x,0.1) -- (\x,-0.1) node[below] {\x}; \end{tikzpicture}'
 
-# dots (...) with other lacheck error fails
+# Newline and space after "{" works regardless of lacheck error
+TEST GIVEN_lacheck_space_after_brace_error_WHEN_tikzrendersvg_THEN_dots_render '
+    \begin{tikzpicture}
+        \foreach \x in {1,2} {
+            \draw (\x,0.1) -- (\x,-0.1) node[below] { \x };
+        }
+    \end{tikzpicture}'
+
+# dots with other lacheck error fails
 TEST GIVEN_lacheck_dots_and_other_error_WHEN_tikzrendersvg_THEN_lacheck_error \
     '\begin{tikzpicture} \foreach \x in {1,...,3} \draw (\x,0.1) -- (\x,-0.1) node[below] {\x}; \end{tikzpicturez}'
 
 # pdflatex error
 TEST GIVEN_pdflatex_error_WHEN_tikzrendersvg_THEN_pdflatex_error \
     '\begin{tikzpicture} \drawz (0,0) -- (1,1); \end{tikzpicture}' 
-
-# pdf2svg error
-# TODO
-
-# permission error
-# TODO
 
 # preamble with special library
 TEST GIVEN_preamble_with_feature_WHEN_tikzrendersvg_THEN_feature_renders '
@@ -436,15 +438,7 @@ TEST GIVEN_draw_Intersecting_lines_WHEN_tikzrendersvg_THEN_example_renders '
 	\fill[red] (c) circle (2pt);
 \end{tikzpicture}'
 
-# Use of cached version (performance)
-
-# Protection of used disk size (performance)
-
-# Validate tikzlive.html
-
-# Validate tikztest.pl
-
 # Clean up if we get here
 sudo find /opt/lampp/htdocs/tikz -name "test_*" -exec rm {} \;
-[ -d out/ ] && rm -r out/
+rm -r out/
 
