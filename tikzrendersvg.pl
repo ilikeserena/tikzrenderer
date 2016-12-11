@@ -151,9 +151,10 @@ sub generateLatexError
         while ($content =~ s#^(.*\n)##)
         {
             $_ = $1;
-            $found_error = 1 if s/^".*?", line (\d+):/"line ".($1 - $lines_preamble).":"/e;
-            $found_error = 1 if s/^.*?$document.*?:(\d+):/"line ".($1 - $lines_preamble).":"/e;
+            $found_error = 1 if s/^".*?", line (\d+):/"line ".($1 - $lines_preamble).":"/e;     # lacheck
+            $found_error = 1 if s/^.*?$document.*?:(\d+):/"line ".($1 - $lines_preamble).":"/e; # pdflatex
             next if not $found_error;
+            s/^l\.(\d+) /"l.".($1 - $lines_preamble) /e;                    # Later repetition of pdflatex
 
             last if /Here is how much of TeX's memory you used/;
 
