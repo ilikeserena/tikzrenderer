@@ -79,21 +79,10 @@ AddEncoding gzip svgz
    Verify with the previous step (`tikztest.pl`) if .svg images work now.
    
 9. Set up a cron job to get rid of spammy tikz requests.
-   Create `/etc/cron.hourly/cleanup_tikz` with contents:
  ```bash
-#!/bin/bash
-logger "Running cleanup_tikz"
-find /opt/lampp/htdocs/tikz/tmp -mtime +0 -exec rm {} \;
-find /opt/lampp/htdocs/tikz -name "live_*" -mtime +0 -exec rm {} \;
-find /opt/lampp/htdocs/tikz -name "preview_*" -mtime +0 -exec rm {} \;
-find /opt/lampp/htdocs/tikz -name "work_*" -mtime +0 -exec rm {} \;
-find /opt/lampp/htdocs/tikz -name "tikztest_*" -mtime +0 -exec rm {} \;
+sudo ln -sf $PWD/cleanup_tikz /etc/cron.hourly/
 ```
-   Set permissions with:
- ```bash
-sudo chmod a+x /etc/cron.hourly/cleanup_tikz
-```
-   Verify it works by checking `/var/log/syslog` that should show "Running cleanup_tikz" after an hour, which should remove any of the specified files that is at least a day old.
+   Verify it works by checking `/var/log/syslog` that should show "Running cleanup_tikz" after an hour, which should remove old files in the fashion specified in it.
    
 10. Configure to run Apache automatically.
     The following procedure appears to be outdated, but it worked for me.
