@@ -80,7 +80,7 @@ AddEncoding gzip svgz
    
 9. Set up a cron job to get rid of spammy tikz requests.
  ```bash
-sudo ln -sf $PWD/cleanup_tikz /etc/cron.hourly/
+sudo ln -s /opt/lampp/cgi-bin/cleanup_tikz /etc/cron.hourly/
 ```
    Verify it works by checking `/var/log/syslog` that should show "Running cleanup_tikz" after an hour, which should remove old files in the fashion specified in it.
    
