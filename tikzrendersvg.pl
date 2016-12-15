@@ -36,7 +36,7 @@ my $POSTAMBLE = <<'EOF';
 \end{document}
 EOF
 
-my $cgi = new CGI;
+my $cgi = new CGI();
 my $tikz = $cgi->param('tikz') || '';
 my $context = $cgi->param('context') || '';
 
@@ -55,6 +55,10 @@ open my $LOG, ">$logfile" or die "Cannot open '$logfile' for writing: $!";
 *OLD_STDERR = *STDERR;
 *STDOUT = $LOG;
 *STDERR = $LOG;
+
+map { print "$_=$ENV{$_}\n" } sort keys %ENV;
+
+$cgi->save(*STDOUT);
 
 print "DOC: $document\n";
 
@@ -296,7 +300,7 @@ EOF
                 print "Found false positive: $1\n\n";
                 $success = 1;
             }
-            if ($content =~ s#^(.*possible unwanted space at "{".*)\n##gm)
+            if ($content =~ s#^(.*possible unwanted space at "\{".*)\n##gm)
             {
                 print "Found false positive: $1\n\n";
                 $success = 1;

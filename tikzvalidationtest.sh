@@ -22,8 +22,21 @@ mkdir out/
 function TEST {
     TEST_NAME="$1"
     TIKZ="$2"
-    curl --silent "http://localhost/$SCRIPT_LOCATION/tikzrendersvg.pl?context=test" --get --data-urlencode "tikz=$TIKZ" >out/$TEST_NAME.svg
+
+    # Test directly
+    export HTTP_COOKIE=...
+    export HTTP_HOST=test.example.com
+    export HTTP_REFERER=...
+    export HTTP_USER_AGENT=...
+    export PATH_INFO=
+    export QUERY_STRING=$(perl -MURI::Escape -e 'print "context=test&tikz=".uri_escape($ARGV[0]);' "$TIKZ")
+    export REQUEST_METHOD=GET
+    perl tikzrendersvg.pl | tail --lines +3 > out/$TEST_NAME.svg
     diff --brief out/$TEST_NAME.svg ref/$TEST_NAME.svg
+
+    # Test through curl
+    # curl --silent "http://localhost/$SCRIPT_LOCATION/tikzrendersvg.pl?context=test" --get --data-urlencode "tikz=$TIKZ" > out/$TEST_NAME.svg
+    # diff --brief out/$TEST_NAME.svg ref/$TEST_NAME.svg
 }
 
 set -v
