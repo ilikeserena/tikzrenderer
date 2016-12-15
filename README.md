@@ -36,6 +36,7 @@ sudo tar xzpf ../cgi.tgz
 sudo rm ../cgi.tgz
 ```
 5. Create relevant directories, link files, and set permissions:
+
  ```bash
 cd /opt/lampp/htdocs
 sudo mkdir tikz
