@@ -43,7 +43,7 @@ sudo mkdir tikz/tmp
 sudo chown -R daemon:daemon tikz
 
 cd /opt/lampp/cgi-bin
-sudo ln *.png *.js tikzlive.html /opt/lampp/htdocs/tikz/
+sudo ln -s *.png *.js tikzlive.html /opt/lampp/htdocs/tikz/
 ```
 6. Install TIKZ software (Ubuntu):
 
