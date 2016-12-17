@@ -56,8 +56,9 @@ open my $LOG, ">$logfile" or die "Cannot open '$logfile' for writing: $!";
 *STDOUT = $LOG;
 *STDERR = $LOG;
 
-map { print "$_=$ENV{$_}\n" } sort keys %ENV;
+#map { print "$_=$ENV{$_}\n" } sort keys %ENV;
 
+print "CGI: ";
 $cgi->save(*STDOUT);
 
 print "DOC: $document\n";
