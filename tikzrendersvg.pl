@@ -5,10 +5,10 @@ use warnings;
 
 use CGI;
 use CGI::Carp qw(fatalsToBrowser);
-use File::Copy qw(copy move);
-use Time::HiRes qw(gettimeofday);
-use POSIX qw(strftime);
 use Digest::MD5 qw(md5_hex);
+use File::Copy qw(copy move);
+use POSIX qw(strftime);
+use Time::HiRes qw(gettimeofday);
 
 undef $/;
 
@@ -49,6 +49,13 @@ $document = "${context}_${document}" if $context;
 my $logfile = "$TMP_DIR/$document.cgi.log";
 my $texfile = "$OUT_DIR/$document.tex";
 my $svgfile = "$OUT_DIR/$document.svg";
+my $svgzfile = "$OUT_DIR/$document.svgz";
+
+my $gzip_ok = 0;
+my $accept_encoding = $ENV{HTTP_ACCEPT_ENCODING};
+if ($accept_encoding && $accept_encoding =~ /\bgzip\b/) {
+    $gzip_ok = 1;
+}
 
 open my $LOG, ">$logfile" or die "Cannot open '$logfile' for writing: $!";
 *OLD_STDOUT = *STDOUT;
@@ -66,7 +73,7 @@ print "DOC: $document\n";
 print "TIKZ: $tikz\n";
 
 my $success = 1;
-if (-f $svgfile)
+if (-f $svgzfile)
 {
     print "Already rendered. Skipping generation\n";
 }
@@ -82,10 +89,25 @@ close $LOG;
 
 if ($success)
 {
-    print "Content-Type: image/svg+xml\n\n";
-    open(IMG, $svgfile) or die "Cannot read from '$svgfile': $!";
-    print while <IMG>;
-    close(IMG);
+    print "Content-Type: image/svg+xml\n";
+    if ($gzip_ok)
+    {
+        print "Content-Encoding: gzip\n";
+    }
+    print "\n";
+ 
+    if ($gzip_ok)
+    {
+        open(IMG, $svgzfile) or die "Cannot read from '$svgzfile': $!";
+        print while <IMG>;
+        close(IMG);
+    }
+    else
+    {
+        open(IMG, $svgfile) or die "Cannot read from '$svgfile': $!";
+        print while <IMG>;
+        close(IMG);
+    }
 }
 else
 {
@@ -212,6 +234,10 @@ sub renderLatex
 
         print "\n";
     }
+
+    $success = executeCmd("unset LD_LIBRARY_PATH ; gzip -c $svgfile > $svgzfile"
+            , "$svgzfile.stderr") if $success;
+
     return $success;
 }
 

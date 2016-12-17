@@ -24,26 +24,27 @@ function TEST {
     TIKZ="$2"
 
     # Test directly
-    #export HTTP_COOKIE=...
-    #export HTTP_HOST=test.example.com
-    #export HTTP_REFERER=...
-    #export HTTP_USER_AGENT=...
-    #export PATH_INFO=
-    #export QUERY_STRING=$(/opt/lampp/bin/perl -MURI::Escape -e 'print "context=test&tikz=".uri_escape($ARGV[0]);' "$TIKZ")
-    #export REQUEST_METHOD=GET
-    #/opt/lampp/bin/perl tikzrendersvg.pl | tail --lines +3 > out/$TEST_NAME.svg
+    export HTTP_COOKIE=...
+    export HTTP_HOST=test.example.com
+    export HTTP_REFERER=...
+    export HTTP_USER_AGENT=...
+    export PATH_INFO=
+    export QUERY_STRING=$(/opt/lampp/bin/perl -MURI::Escape -e 'print "context=test&tikz=".uri_escape($ARGV[0]);' "$TIKZ")
+    export REQUEST_METHOD=GET
+    /opt/lampp/bin/perl tikzrendersvg.pl | tail --lines +3 > out/$TEST_NAME.svg
 
     # Test through curl
-    curl --silent "http://localhost/$SCRIPT_LOCATION/tikzrendersvg.pl?context=test" --get --data-urlencode "tikz=$TIKZ" > out/$TEST_NAME.svg
+    #curl --silent -H "Accept-Encoding: gzip,deflate" "http://localhost/$SCRIPT_LOCATION/tikzrendersvg.pl?context=test" --get --data-urlencode "tikz=$TIKZ" > out/$TEST_NAME.svg
 
     diff --brief out/$TEST_NAME.svg ref/$TEST_NAME.svg
 }
 
-set -v
+set -vx
 
 # Nominal sunny day scenario
 TEST nominal \
     '\begin{tikzpicture} \draw (0,0) -- (1,1); \end{tikzpicture}' 
+exit 0
 
 # lacheck error
 TEST GIVEN_lacheck_error_WHEN_tikzrendersvg_THEN_lacheck_error \
