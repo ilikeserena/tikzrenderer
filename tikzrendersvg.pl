@@ -172,18 +172,31 @@ sub generateLatexError
         open (ERRFH, '<:encoding(UTF-8)', $error_file)
             or ($success = 0, print("Could not read file: $!\n"));
         my $lines_preamble = ($PREAMBLE =~ tr#\n##) + 1;
-        my $found_error = 0;
         my $content = <ERRFH>;
         close ERRFH;
+
+        # Remove pdflatex's preamble up to \n)\n
+        $content =~ s#^[\S\s]+\n\)\n+##;    
+        # Remove pdflatex's postamble
+        $content =~ s#\s*Here is how much of TeX's memory you used[\S\s]*#\n#m;
+        # Undo pdflatex's hard line wrapping
+        $content =~ s#(^[^\n]{79})\n#$1#gm;
+
+        # Suppress pdflatex's pgfplots compatibility warning
+        $content =~ s#^Package pgfplots Warning: running in backwards compatibility mode.*?into your preamble.\n on input line \d+\.\n+##;    
+        # Suppress pdflatex's redundant errors
+        $content =~ s#^<to be read again>\s*\\par\s*l\.\d+\n##m;
+        $content =~ s#^Type  H <return>  for immediate help.\n \.\.\. *\n##m; 
+
+        print "\nERR: $content\n";
+
+        my $found_error = 0;
         while ($content =~ s#^(.*\n)##)
         {
             $_ = $1;
             $found_error = 1 if s/^".*?", line (\d+):/"line ".($1 - $lines_preamble).":"/e;     # lacheck
             $found_error = 1 if s/^.*?$document.*?:(\d+):/"line ".($1 - $lines_preamble).":"/e; # pdflatex
-            next if not $found_error;
             s/^l\.(\d+) /"l.".($1 - $lines_preamble) /e;                    # Later repetition of pdflatex
-
-            last if /Here is how much of TeX's memory you used/;
 
             s/\\/\\textbackslash /g;
             s/~/\\textasciitilde /g;
