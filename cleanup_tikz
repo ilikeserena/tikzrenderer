@@ -1,7 +1,7 @@
 #!/bin/bash
 logger "Running cleanup_tikz"
 find /opt/lampp/htdocs/tikz/tmp -mmin +60 -exec rm {} \;
-find /opt/lampp/htdocs/tikz -name "live_*" -mmin +5 -exec rm {} \;
+find /opt/lampp/htdocs/tikz -name "live_*" -mmin +15 -exec rm {} \;
 find /opt/lampp/htdocs/tikz -name "preview_*" -mmin +60 -exec rm {} \;
 find /opt/lampp/htdocs/tikz -name "work_*" -mmin +60 -exec rm {} \;
 find /opt/lampp/htdocs/tikz -name "tikztest_*" -mmin +60 -exec rm {} \;
