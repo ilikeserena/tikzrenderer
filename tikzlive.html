@@ -151,31 +151,20 @@ body {
   </p>
   <p>rendersvg:<br/><img id="rendersvg" src=""></img></p>
   <p>tikz:<br/><textarea id="tikz" name="tikz" cols="120" rows="16">
-\begin{tikzpicture}
-  \begin{axis}
-    \addplot coordinates {(0,1) (0.5,1) (1,1.2)}; 
-  \end{axis} 
+\begin{tikzpicture}[blue]
+  \coordinate (A) at (0,0);
+  \coordinate (B) at (4,0);
+  \coordinate (C) at (4,3);
+  \draw[blue, ultra thick] (A) -- (B) -- (C) -- cycle;
+  \path (A) node[below left] {A} -- (B) node[below right] {B} -- (C) node[above] {C};
+  \path (A) -- node[below] {c} (B) -- node[right] {a} (C) -- node[above left] {b} (A);
+  \path (A) node[above right, xshift=12] {$\alpha$};
+  \draw[thick] (B) rectangle +(-0.4,0.4);
+  \draw[thick] (A) +(1,0) arc (0:atan(3/4):1);
 \end{tikzpicture}
   </textarea></p>
 
 <script>
-
-var tikztemplates = [
-  '\begin{tikzpicture}' +
-  '  \begin{axis}' +
-  '    \addplot coordinates {(0,1) (0.5,1) (1,1.2)};' +
-  '  \end{axis}' +
-  '\end{tikzpicture}'
-,
-function() {/*\begin{tikzpicture}[scale=2]
-  \draw[<->] (-1.2,0) -- (1.2,0);
-  \draw[->] (0,0) -- (0,1.7);
-  \foreach \i in {-1,-.5,...,1} {\draw (\i,.05) -- (\i,-.05) node[below] {$\i$}; }
-  \foreach \i in {.5,1,...,1.5} { \draw (.05,\i) -- (-.05,\i) node[left] {$\i$}; }
-  \draw[blue, ultra thick, domain=-1:1, variable=\x] plot ({\x}, {(sec(deg(\x))^2) - 1 - (\x)^2});
-\end{tikzpicture}
-*/}
-];
 
 $('.tikztemplate').each(function(index, element) {
   $(this).width(100);
@@ -214,12 +203,8 @@ function doneTyping() {
 	$('#rendersvg').attr('src', 'http://' + location.host + '/cgi-bin/tikzrendersvg.pl?context=live&tikz=' + tikzUri);
 }
 
-{
-	console.log('initial renderrequest');
-	var tikzUri = $('#tikz').val();
-	tikzUri = encodeURIComponent(tikzUri);
-	$('#rendersvg').attr('src', 'http://' + location.host + '/cgi-bin/tikzrendersvg.pl?context=live&tikz=' + tikzUri);
-}
+console.log('initial renderrequest');
+doneTyping()
 </script>
   
 </body>
