@@ -1,9 +1,154 @@
 <html>
 <head>
-	<title>PHP TikZ test</title>
-	<script type="text/javascript" src="jquery-3.1.1.min.js"></script>
+<title>JavaScript TikZ test</title>
+<script type="text/javascript" src="jquery-3.1.1.min.js"></script>
+<style>
+body {
+    background-color: #f0f0f0;
+}
+.tikztemplateContainer {
+    background-color: #d0d0d0;
+}
+.tikztemplate:hover {
+    background-color: #e0e0e0;
+}
+.tikztemplate:active {
+    background-color: #c0c0c0;
+}
+</style>
 </head>
+
 <body>
+  <p>templates:<br/>
+  <div class="tikztemplateContainer">
+    <img class="tikztemplate" title="Triangle" src="" data-tikz="\begin{tikzpicture}[blue]
+  \coordinate (A) at (0,0);
+  \coordinate (B) at (4,0);
+  \coordinate (C) at (4,3);
+  \draw[blue, ultra thick] (A) -- (B) -- (C) -- cycle;
+  \path (A) node[below left] {A} -- (B) node[below right] {B} -- (C) node[above] {C};
+  \path (A) -- node[below] {c} (B) -- node[right] {a} (C) -- node[above left] {b} (A);
+  \path (A) node[above right, xshift=12] {$\alpha$};
+  \draw[thick] (B) rectangle +(-0.4,0.4);
+  \draw[thick] (A) +(1,0) arc (0:atan(3/4):1);
+\end{tikzpicture}"
+    />
+    <img class="tikztemplate" title="Basic pfgplot" src="" data-tikz="\begin{tikzpicture}
+  \begin{axis}[title={pgfplots package}]
+    \addplot coordinates {(0,1) (0.5,1) (1,1.2)}; 
+  \end{axis} 
+\end{tikzpicture}" 
+    />
+    <img class="tikztemplate" title="Basic pfgplot function graph" src="" data-tikz="\begin{tikzpicture}
+  \begin{axis}[title={pgfplots package}]
+    \addplot (x, x*x);
+    \addplot (x, {10 * sin(deg(x))});
+  \end{axis} 
+\end{tikzpicture}" 
+    />
+    <img class="tikztemplate" title="Pfgplot function graph" src="" data-tikz="\begin{tikzpicture}
+  \begin{axis}[
+      title={pgfplots package}, xlabel={$x$-axis}, ylabel={$y$-axis},
+      grid=both, axis lines=middle,
+      xmax=6, ymax=40
+    ]
+    \addplot[red, smooth, ultra thick] (x, x*x) node[pos=0.2, pin=80:{$y=x^2$}] {};
+    \addlegendentry{parabola}
+    \addplot[blue, smooth, ultra thick] (x, {10 * sin(deg(x))}) node[pos=0.93, left] {$y=\sin x$};
+    \addlegendentry{sine}
+  \end{axis} 
+\end{tikzpicture}" 
+    />
+    <img class="tikztemplate" title="TikZ function graph" src="" data-tikz="\begin{tikzpicture}
+  \draw[help lines] (-3,-1) grid (3,4);
+  \draw[<->] (-3.4,0) -- (3.4,0) node[below right] {$x$-axis};
+  \draw[<->] (0,-1.2) -- (0,4.2) node[right] {$y$-axis};
+  \draw foreach \i in {-3,...,3} { (\i,0.1) -- (\i,-0.1) node[below] {$\i$} };
+  \draw foreach \i in {-1,...,4} { (0.1,\i) -- (-0.1,\i) node[left] {$\i$} };
+  \draw[domain=-2:2, variable=\x, red, ultra thick] plot ({\x}, {(\x)^2}) node[right] {$y=x^2$};
+  \draw[domain=-pi:pi, variable=\x, blue, ultra thick] plot ({\x}, {sin(deg(\x))}) node[above right] {$y=\sin x$};
+\end{tikzpicture}" 
+    />
+    <img class="tikztemplate" title="Automaton" src="" data-tikz="\begin{tikzpicture}[shorten >=1pt,node distance=2cm,auto]
+  %preamble \usetikzlibrary{automata}
+  \node[state,initial]    (q_0)                {$q_0$};
+  \node[state,accepting]  (q_1) [right of=q_0] {$q_1$};
+ 
+  \path[->] (q_0) edge [bend left]  node {$a$} (q_1)
+            (q_1) edge [bend left]  node {$b$} (q_0);
+\end{tikzpicture}"
+    />
+    <img class="tikztemplate" title="Hyperbola" src="" data-tikz="\begin{tikzpicture}
+\draw[gray, very thin,->] (-4,0) -- (4,-0); % x-axis
+\draw[gray, very thin,->] (0,-3) -- (0,3);  % y-axis
+\draw[gray, very thin] (-2,-1.5) rectangle (2,1.5);
+\draw[red,line width=2pt] (2.5,0) -- (2.5,1.125) node[right=1pt] {$\ell=\dfrac{b^2}{a}$}; % semi latus rectum
+\draw[domain=-1.3:1.3,smooth,variable=\t,line width=2pt] plot ({2*cosh(\t)},{1.5*sinh(\t)});
+\draw[domain=-1.3:1.3,smooth,variable=\t,line width=2pt] plot ({-2*cosh(\t)},{1.5*sinh(\t)});
+\node at (-1.2,-2.5) {$\dfrac{x^2}{a^2} - \dfrac{y^2}{b^2}=1$ };
+\node at (1.5,-2.5) {$r=\dfrac{b^2}{a - c \cos\theta}$ };
+\node at (-1.5,2.5) {$(\pm a \cosh u, b \sinh u)$ };
+\draw (-4,-3) -- (4,3);
+\draw (4,-3) -- (-4,3);
+\node at (-1.2,0.1) {a};
+\node at (-1.85,0.75) {b};
+\node at (-0.85,0.85) {c};
+\draw[<->, green] (0,-0.3) -- (2.5,-0.3);
+\node[green] at (1.25,-4pt) {c};
+\fill (-2.5,0) circle (0.1); % focus
+\fill (2.5,0) circle (0.1);  % focus
+\end{tikzpicture}"
+    />
+    <img class="tikztemplate" title="Histogram" src="" data-tikz="\begin{tikzpicture}
+\begin{axis}[	tiny,
+		width=6in,
+		xtick=data,
+		ymin=0 ]
+	\addplot+[
+		hist={bins=10, density},
+		fill=blue!20,
+		mark=none,
+	] table[ row sep=\\, y index=0 ] {%
+		data \\ 565 \\ 786 \\ 870 \\ 923 \\ 948 \\ 951 \\ 964 \\ 968 \\
+		997 \\1007 \\1013 \\1037 \\1040 \\1051 \\1056 \\1080 \\
+		1088 \\1090 \\1102 \\1103 \\1104 \\1120 \\1151 \\1159 \\
+		1165 \\1185 \\1189 \\1207 \\1216 \\1233 \\1251 \\1256 \\
+		1261 \\1292 \\1312 \\1317 \\1347 \\1358 \\1385 \\1416 \\
+		1477 \\1500 \\1514 \\1567 \\1592 \\1588 \\1615 \\1713 \\
+	 	2325 \\3168 \\
+	};
+\end{axis}
+\end{tikzpicture}"
+    />
+    <img class="tikztemplate" title="Histogram" src="" data-tikz="\begin{tikzpicture}
+  \begin{scope}[blend group = soft light]
+    \fill[red!30!white]   ( 90:2) circle (3);
+    \fill[green!30!white] (210:2) circle (3);
+    \fill[blue!30!white]  (330:2) circle (3);
+  \end{scope}
+  \node at (90:3)     {$A$};
+  \node at (210:3)    {$B$};
+  \node at (330:3)    {$C$};
+  \node [font=\small] {$A \cap B \cap C$};
+  \node at (30:2)     {$A \cap C$};
+  \node at (150:2)    {$A \cap B$};
+  \node at (270:2)    {$B \cap C$};
+\end{tikzpicture}"
+    />
+    <img class="tikztemplate" title="Histogram" src="" data-tikz="\begin{tikzpicture}
+\draw (-4,0) -- (4,0);
+\draw (-4,0) circle (1.5);
+\draw (-4,-1.5) -- (4,-.2);
+\fill[draw=black!50,top color=blue!80,bottom color=black!40] 
+    (-4,0) circle (.5) node {Earth};
+\fill[draw=black!50,top color=orange!80,bottom color=black!40] 
+    (4,0) circle (1) node {Sun};
+\fill[draw=black!50,top color=gray,bottom color=black!20]
+     (-4,-1.5) circle (.1) node[below = 1pt] {Satellite};
+\end{tikzpicture}"
+    />
+  </div>
+  </p>
   <p>rendersvg:<br/><img id="rendersvg" src=""></img></p>
   <p>tikz:<br/><textarea id="tikz" name="tikz" cols="120" rows="16">
 \begin{tikzpicture}
@@ -15,23 +160,53 @@
 
 <script>
 
+var tikztemplates = [
+  '\begin{tikzpicture}' +
+  '  \begin{axis}' +
+  '    \addplot coordinates {(0,1) (0.5,1) (1,1.2)};' +
+  '  \end{axis}' +
+  '\end{tikzpicture}'
+,
+function() {/*\begin{tikzpicture}[scale=2]
+  \draw[<->] (-1.2,0) -- (1.2,0);
+  \draw[->] (0,0) -- (0,1.7);
+  \foreach \i in {-1,-.5,...,1} {\draw (\i,.05) -- (\i,-.05) node[below] {$\i$}; }
+  \foreach \i in {.5,1,...,1.5} { \draw (.05,\i) -- (-.05,\i) node[left] {$\i$}; }
+  \draw[blue, ultra thick, domain=-1:1, variable=\x] plot ({\x}, {(sec(deg(\x))^2) - 1 - (\x)^2});
+\end{tikzpicture}
+*/}
+];
+
+$('.tikztemplate').each(function(index, element) {
+  $(this).width(100);
+  $(this).attr('src', 
+    'http://' + location.host + '/cgi-bin/tikzrendersvg.pl?context=live&tikz=' + encodeURIComponent($(this).attr('data-tikz')));
+});
+
+$('.tikztemplate').click(function() {
+  var tikz = $(this).attr('data-tikz');
+  $('#tikz').text(tikz);
+  tikzUri = encodeURIComponent(tikz);
+  $('#rendersvg').attr('src', 'http://' + location.host + '/cgi-bin/tikzrendersvg.pl?context=live&tikz=' + tikzUri);
+});
+
 // Trigger rendering only when user is done typing, say after 1 second
 var typingTimer;                //timer identifier
 var doneTypingInterval = 200;  //time in ms, 1 second for example
 
 // On keyup, start the countdown
-$('#tikz').keyup(function () {
+$('#tikz').keyup(function() {
   clearTimeout(typingTimer);
   typingTimer = setTimeout(doneTyping, doneTypingInterval);
 });
 
 // On keydown, clear the countdown 
-$('#tikz').keydown(function () {
+$('#tikz').keydown(function() {
   clearTimeout(typingTimer);
 });
 
 // User is "done typing", make a rendering request
-function doneTyping () {
+function doneTyping() {
 	//do something
 	console.log('doneTyping->renderrequest');
 	var tikzUri = $('#tikz').val();
@@ -45,47 +220,8 @@ function doneTyping () {
 	tikzUri = encodeURIComponent(tikzUri);
 	$('#rendersvg').attr('src', 'http://' + location.host + '/cgi-bin/tikzrendersvg.pl?context=live&tikz=' + tikzUri);
 }
-
-
-$('#rendersvg').each(function(){
-	if (this.complete || /*for IE 10-*/ $(this).height() > 0) {
-		console.log('complete');
-	}
-});
-$('#rendersvg').each(function(){
-	$(this).load(function(){
-		console.log('loaded');
-	});
-});
-
 </script>
   
 </body>
 </html>
 
-<!--
-<?php
-	$match = '\begin{tikzpicture}
-  \begin{axis}
-    \addplot coordinates {(0,1) (0.5,1) (1,1.2)}; 
-  \end{axis} 
-\end{tikzpicture}';
-
-	$tikzForMd5 = preg_replace("/[\s\r\n]+/m", " ", $match);
-	$tikzForMd5 = preg_replace("/^\s*(.*?)\s*$/", "$1", $tikzForMd5);
-	$tikzMd5 = md5($tikzForMd5);
-	$clientsvgfile = "/tikz/$tikzMd5.svg";
-	$serversvgfile = $_SERVER['DOCUMENT_ROOT'] . $clientsvgfile;
-
-	print "<img src=$clientsvgfile></img><br />\n";
-	print "$serversvgfile<br />\n";
-	print "$clientsvgfile<br />\n";
-
-	if (!file_exists($serversvgfile))
-	{
-		$tikzUri = urlencode($tikz);
-		$content = file_get_contents("http://35.164.211.156/cgi-bin/tikzrendersvg.pl?tikz=$tikzUri");
-		file_put_contents($serversvgfile, $response);
-	}
-?>
--->
