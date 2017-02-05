@@ -338,9 +338,8 @@ $('.tikztemplate').each(function(index, element) {
 
 $('.tikztemplate').click(function() {
   var tikz = $(this).attr('data-tikz');
-  $('#tikz').text(tikz);
-  tikzUri = encodeURIComponent(tikz);
-  $('#rendersvg').attr('src', 'http://' + location.host + '/cgi-bin/tikzrendersvg.pl?context=live&tikz=' + tikzUri);
+  $('#tikz').val(tikz);
+  $('#rendersvg').attr('src', 'http://' + location.host + '/cgi-bin/tikzrendersvg.pl?context=live&tikz=' + encodeURIComponent(tikz));
 });
 
 // Trigger rendering only when user is done typing, say after 1 second
@@ -360,14 +359,11 @@ $('#tikz').keydown(function() {
 
 // User is "done typing", make a rendering request
 function doneTyping() {
-	//do something
-	console.log('doneTyping->renderrequest');
-	var tikzUri = $('#tikz').val();
-	tikzUri = encodeURIComponent(tikzUri);
-	$('#rendersvg').attr('src', 'http://' + location.host + '/cgi-bin/tikzrendersvg.pl?context=live&tikz=' + tikzUri);
+  var tikz = $('#tikz').val();
+  $('#rendersvg').attr('src', 'http://' + location.host + '/cgi-bin/tikzrendersvg.pl?context=live&tikz=' + encodeURIComponent(tikz));
 }
 
-console.log('initial renderrequest');
+// Initial rendering request
 doneTyping()
 </script>
   
