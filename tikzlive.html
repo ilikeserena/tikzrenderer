@@ -33,8 +33,20 @@ body {
   \draw[thick] (A) +(1,0) arc (0:atan(3/4):1);
 \end{tikzpicture}"
     />
+    <img class="tikztemplate" title="TikZ function graph" src="" data-tikz="\begin{tikzpicture}
+  \node at (0,5.7) {http://ctan.cs.uu.nl/graphics/pgf/base/doc/pgfmanual.pdf};
+
+  \draw[help lines] (-4,-2) grid (4,5);
+  \draw[<->] (-4.4,0) -- (4.4,0) node[above] {$x$-axis};
+  \draw[<->] (0,-2.2) -- (0,5.2) node[right] {$y$-axis};
+  \draw foreach \i in {-4,...,4} { (\i,0.1) -- (\i,-0.1) node[below] {$\i$} };
+  \draw foreach \i in {-2,...,5} { (0.1,\i) -- (-0.1,\i) node[left] {$\i$} };
+  \draw[domain=-2.2:2.2, variable=\x, red, ultra thick] plot ({\x}, {(\x)^2}) node[right] {$y=x^2$};
+  \draw[domain=-4:4, variable=\x, blue, ultra thick] plot ({\x}, {sin(deg(\x))}) node[below left] {$y=\sin x$};
+\end{tikzpicture}" 
+    />
     <img class="tikztemplate" title="Basic pfgplot function graph" src="" data-tikz="\begin{tikzpicture}
-  \begin{axis}[title={pgfplots package}]
+  \begin{axis}[title={http://pgfplots.sourceforge.net/pgfplots.pdf}]
     \addplot (x, x*x);
     \addplot (x, {10 * sin(deg(x))});
   \end{axis} 
@@ -42,7 +54,8 @@ body {
     />
     <img class="tikztemplate" title="Pfgplot function graph" src="" data-tikz="\begin{tikzpicture}
   \begin{axis}[
-      title={pgfplots package}, xlabel={$x$-axis}, ylabel={$y$-axis},
+      title={http://pgfplots.sourceforge.net/pgfplots.pdf},
+      xlabel={$x$-axis}, ylabel={$y$-axis},
       grid=both, axis lines=middle,
       xmax=6, ymax=40
     ]
@@ -51,16 +64,6 @@ body {
     \addplot[blue, smooth, ultra thick] (x, {10 * sin(deg(x))}) node[pos=0.93, left] {$y=\sin x$};
     \addlegendentry{sine}
   \end{axis} 
-\end{tikzpicture}" 
-    />
-    <img class="tikztemplate" title="TikZ function graph" src="" data-tikz="\begin{tikzpicture}
-  \draw[help lines] (-3,-1) grid (3,4);
-  \draw[<->] (-3.4,0) -- (3.4,0) node[below right] {$x$-axis};
-  \draw[<->] (0,-1.2) -- (0,4.2) node[right] {$y$-axis};
-  \draw foreach \i in {-3,...,3} { (\i,0.1) -- (\i,-0.1) node[below] {$\i$} };
-  \draw foreach \i in {-1,...,4} { (0.1,\i) -- (-0.1,\i) node[left] {$\i$} };
-  \draw[domain=-2:2, variable=\x, red, ultra thick] plot ({\x}, {(\x)^2}) node[right] {$y=x^2$};
-  \draw[domain=-pi:pi, variable=\x, blue, ultra thick] plot ({\x}, {sin(deg(\x))}) node[above right] {$y=\sin x$};
 \end{tikzpicture}" 
     />
     <img class="tikztemplate" title="Automaton" src="" data-tikz="\begin{tikzpicture}[shorten >=1pt,node distance=2cm,auto]
@@ -141,9 +144,14 @@ body {
      (-4,-1.5) circle (.1) node[below = 1pt] {Satellite};
 \end{tikzpicture}"
     />
-    <img class="tikztemplate" title="tikz-3dplot package" src="" data-tikz="\begin{tikzpicture}[scale=5,tdplot_main_coords]
-	%preamble \usepackage{tikz-3dplot}
-	%preamble \tdplotsetmaincoords{60}{110}
+    <img class="tikztemplate" title="tikz-3dplot package" src="" data-tikz="\begin{tikzpicture}
+%preamble \usepackage{tikz-3dplot}
+%preamble \tdplotsetmaincoords{60}{110}
+
+\node at (0,5.5) {http://ctan.triasinformatica.nl/graphics/pgf/contrib/};
+\node at (0,5) {tikz-3dplot/tikz-3dplot\_documentation.pdf};
+
+\begin{scope}[scale=5,tdplot_main_coords]
 
 	%
 	%define polar coordinates for some vector
@@ -221,6 +229,85 @@ body {
 
 	%draw theta arc and label
 	\tdplotdrawarc[tdplot_rotated_coords,color=blue]{(0,0,0)}{0.2}{0}{55}{anchor=south west,color=black}{$\theta'$}
+
+\end{scope}
+
+\end{tikzpicture}"
+    />
+    <img class="tikztemplate" title="Infinitesimal element in spherical coordinates" src="" data-tikz="\begin{tikzpicture}[font=\Large, >=stealth]
+
+% \project{x}{y}{z} -> (x,y)
+\def\project#1#2#3{{(#2) - (#1)/2}, {(#3) - (#1)/4}};
+
+% \cilinder{rho}{phi}{z} -> (x,y,z)
+\def\cilinder#1#2#3{\project{(#1) * cos(#2)}{(#1) * sin(#2)}{#3}};
+
+% \spherical{r}{theta}{phi} -> (x,y,z)
+\def\spherical#1#2#3{\project{(#1) * sin(#2) * cos(#3)}{(#1) * sin(#2) * sin(#3)}{(#1) * cos(#2)}};
+
+%
+% CONSTANTS
+%
+\def\myaxelength{6.5};
+\def\myr{6};
+\def\mytheta{40};
+\def\myphi{60};
+
+\def\myrho{3};
+\def\myz{1.5};
+
+\colorlet{unitvectorcolor}{green!70!black};
+\colorlet{infinitesimalcolor}{red!90!black};
+\colorlet{coordinatecolor}{blue};
+
+% Axes
+\begin{scope}[help lines]
+\draw[->] (0,0) -- (\project{\myaxelength}{0}{0}) node[left] {$x$};
+\draw[->] (0,0) -- (\myaxelength,0) node[right] {$y$};
+\draw[->] (0,0) -- (0,\myaxelength) node[above] {$z$};
+\end{scope}
+
+% Help lines
+\begin{scope}[help lines]
+\draw[domain=0:\myphi,smooth,variable=\phi] plot (\cilinder{\myr * sin(\mytheta)}{\phi}{0});
+\draw[domain=0:\myphi,smooth,variable=\phi] plot (\cilinder{\myr * sin(\mytheta)}{\phi}{\myr * cos(\mytheta)});
+\draw[domain=0:\mytheta,smooth,variable=\theta] plot (\spherical{\myr}{\theta}{\myphi});
+
+\draw (0,0) -- (\cilinder{\myr * sin(\mytheta)}{\myphi}{0}) -- (\spherical{\myr}{\mytheta}{\myphi}) -- (0,{\myr * cos(\mytheta)});
+\draw (\cilinder{\myr * sin(\mytheta)}{0}{0}) -- (\cilinder{\myr * sin(\mytheta)}{0}{\myr * cos(\mytheta)}) -- (0,{\myr * cos(\mytheta)});
+\end{scope}
+
+% Coordinates
+\begin{scope}[coordinatecolor]
+\draw[ultra thick, ->] (0,0) -- (\spherical{\myr}{\mytheta}{\myphi});
+\node[below] at (0,0.1) {$\phi$};
+\node[above right] at (0,0.7) {$\theta$};
+\node[above] at (\spherical{\myr * 0.5}{\mytheta}{\myphi}) {$r$};
+\end{scope}
+
+% Unit vectors
+\begin{scope}[unitvectorcolor]
+\draw[->] (\spherical{\myr}{\mytheta}{\myphi}) -- (\spherical{\myr + 2.5}{\mytheta}{\myphi}) node[right] {$\boldsymbol{\hat r}$};
+\draw[->] (\spherical{\myr}{\mytheta}{\myphi}) -- (\spherical{sqrt(\myr*\myr+2.5*2.5)}{\mytheta + atan(2.5/\myr)}{\myphi}) node[right] {$\boldsymbol{\hat\theta}$};
+\draw[unitvectorcolor!50,->] (\spherical{\myr}{\mytheta}{\myphi}) -- (\spherical{sqrt(\myr*\myr+2.5*2.5)}{\mytheta}{\myphi + atan(2.5/\myr)}) node[right] {$\boldsymbol{\hat\phi}$};
+\end{scope}
+
+% Infinitesimal block
+\draw[infinitesimalcolor,ultra thick,domain=\mytheta:{\mytheta + atan(2/\myr)},smooth,variable=\theta] plot (\spherical{\myr}{\theta}{\myphi})
+        -- (\spherical{\myr + 2}{\mytheta + atan(2/\myr)}{\myphi})
+        [domain={\mytheta + atan(2/\myr)}:\mytheta,smooth,variable=\theta] plot (\spherical{\myr + 2}{\theta}{\myphi}) 
+        -- (\spherical{\myr}{\mytheta}{\myphi});
+
+\draw[infinitesimalcolor,ultra thick,domain=\myphi:{\myphi + atan(2/\myr)},smooth,variable=\phi] plot (\spherical{\myr + 2}{\mytheta}{\phi})
+        [domain=\mytheta:{\mytheta + atan(2/\myr)},smooth,variable=\theta] plot (\spherical{\myr + 2}{\theta}{\myphi + atan(2/\myr)})
+        [domain={\myphi + atan(2/\myr)}:\myphi,smooth,variable=\phi] plot (\spherical{\myr + 2}{\mytheta + atan(2/\myr)}{\phi}) ;
+
+\draw[infinitesimalcolor,ultra thick,domain=\myphi:{\myphi + atan(2/\myr)},smooth,variable=\phi] plot (\spherical{\myr}{\mytheta + atan(2/\myr)}{\phi})
+        -- (\spherical{\myr + 2}{\mytheta + atan(2/\myr)}{\myphi + atan(2/\myr)}) ;
+
+\node[infinitesimalcolor,font=,right] at (\spherical{\myr + 0.8}{\mytheta}{\myphi}) {$dr$};
+\node[infinitesimalcolor,font=,right] at (\spherical{\myr}{\mytheta + atan(0.7/\myr)}{\myphi}) {$rd\theta$};
+\node[infinitesimalcolor,font=,above] at (\spherical{\myr + 2}{\mytheta + atan(2/\myr)}{\myphi + atan(0.9/\myr)}) {$r\sin\theta d\phi$};
 
 \end{tikzpicture}"
     />
