@@ -311,6 +311,52 @@ body {
 
 \end{tikzpicture}"
     />
+    <img class="tikztemplate" title="Bead necklaces" src="" data-tikz="\begin{tikzpicture}
+    %preamble \usetikzlibrary{shadows}
+    [font=\large,
+        bead/.style args={#1 on #2}{#2!70!black, circle, ball color=#2, color=#1,
+            general shadow={
+			shadow xshift=.4ex, shadow yshift=-.4ex,
+			opacity=.5, fill=black!50,
+		}},
+        bluebead/.style={bead={white on blue}},
+        mybluebead/.style={bead={white on myblue}},
+        redbead/.style={bead={black on red}}, 
+        greenbead/.style={bead={black on green}}, 
+    ]
+
+\definecolor{myblue}{HTML}{6060FF};
+
+\newcommand{\bead}[2] {
+   node[#1bead] (#2) {#2}
+}
+\newcommand{\sbead}[2] {
+   node[bead={black on #1}] (#2) {#2}
+}
+
+\newcommand{\bracelet}[1] {
+    coordinate (c1) +(1,-0.5) coordinate (c2) +(2,0) coordinate (c3)
+    \foreach \color [count=\i] in #1 {
+        (c\i) \bead{\color}{\i}
+    }
+    [draw, bend right] (1) edge[ultra thick] (2) (2) edge[ultra thick] (3) (3) edge[ultra thick] (1)
+} 
+
+\newcommand{\equivalenceclass}[1] {
+    node {\LARGE $\{$}
+    \foreach \colorseq [count=\seqi] in {#1} {
+        node {\LARGE $,$} ++(1,0) 
+        \bracelet\colorseq ++(1,0)
+    }
+    node {\LARGE $\}$}
+}
+
+\path (0,0) \equivalenceclass{{red,green,myblue}};
+\path (0,-2) \equivalenceclass{{red,myblue,green},{red,green,blue},{green,red,myblue}};
+%\path (0,-4) \equivalenceclass{{red,green,myblue},{red,myblue,green},{green,red,myblue},{green,myblue,red},{myblue,red,green},{myblue,green,red}}; 
+
+\end{tikzpicture}"
+  /> 
   </div>
   </p>
   <p>rendersvg:<br/><img id="rendersvg" src=""></img></p>
