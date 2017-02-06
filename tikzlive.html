@@ -21,7 +21,8 @@ body {
 <body>
   <p>templates:<br/>
   <div class="tikztemplateContainer">
-    <img class="tikztemplate" title="Triangle" src="" data-tikz="\begin{tikzpicture}[blue]
+
+<img class="tikztemplate" title="Triangle" src="" data-tikz="\begin{tikzpicture}[blue]
   \coordinate (A) at (0,0);
   \coordinate (B) at (4,0);
   \coordinate (C) at (4,3);
@@ -31,9 +32,9 @@ body {
   \path (A) node[above right, xshift=12] {$\alpha$};
   \draw[thick] (B) rectangle +(-0.4,0.4);
   \draw[thick] (A) +(1,0) arc (0:atan(3/4):1);
-\end{tikzpicture}"
-    />
-    <img class="tikztemplate" title="TikZ function graph" src="" data-tikz="\begin{tikzpicture}
+\end{tikzpicture}" />
+
+<img class="tikztemplate" title="TikZ function graph" src="" data-tikz="\begin{tikzpicture}
   \node at (0,5.7) {http://mirrors.ctan.org/graphics/pgf/base/doc/pgfmanual.pdf};
 
   \draw[help lines] (-4,-2) grid (4,5);
@@ -43,16 +44,16 @@ body {
   \draw foreach \i in {-2,...,5} { (0.1,\i) -- (-0.1,\i) node[left] {$\i$} };
   \draw[domain=-2.2:2.2, variable=\x, red, ultra thick] plot ({\x}, {(\x)^2}) node[right] {$y=x^2$};
   \draw[domain=-4:4, variable=\x, blue, ultra thick] plot ({\x}, {sin(deg(\x))}) node[below left] {$y=\sin x$};
-\end{tikzpicture}" 
-    />
-    <img class="tikztemplate" title="Basic pfgplot function graph" src="" data-tikz="\begin{tikzpicture}
+\end{tikzpicture}" />
+
+<img class="tikztemplate" title="Basic pfgplot function graph" src="" data-tikz="\begin{tikzpicture}
   \begin{axis}[align=center, title={http://mirrors.ctan.org/graphics/pgf/contrib/ \\ pgfplots/doc/pgfplots.pdf}]
     \addplot (x, x*x);
     \addplot (x, {10 * sin(deg(x))});
   \end{axis} 
-\end{tikzpicture}" 
-    />
-    <img class="tikztemplate" title="Pfgplot function graph" src="" data-tikz="\begin{tikzpicture}
+\end{tikzpicture}" />
+
+<img class="tikztemplate" title="Pfgplot function graph" src="" data-tikz="\begin{tikzpicture}
   \begin{axis}[
       align=center, title={http://mirrors.ctan.org/graphics/pgf/contrib/ \\ pgfplots/doc/pgfplots.pdf},
       xlabel={$x$-axis}, ylabel={$y$-axis},
@@ -64,20 +65,23 @@ body {
     \addplot[blue, smooth, ultra thick] (x, {10 * sin(deg(x))}) node[pos=0.93, left] {$y=\sin x$};
     \addlegendentry{sine}
   \end{axis} 
-\end{tikzpicture}" 
-    />
-    <img class="tikztemplate" title="Automaton" src="" data-tikz="\begin{tikzpicture}[shorten >=1pt,node distance=2cm,auto]
+\end{tikzpicture}" />
+
+<img class="tikztemplate" title="Automaton" src="" data-tikz="\begin{tikzpicture}[shorten >=1pt,node distance=2cm,auto]
   %preamble \usetikzlibrary{automata}
   \node[state,initial]    (q_0)                {$q_0$};
   \node[state,accepting]  (q_1) [right of=q_0] {$q_1$};
  
   \path[->] (q_0) edge [bend left]  node {$a$} (q_1)
             (q_1) edge [bend left]  node {$b$} (q_0);
-\end{tikzpicture}"
-    />
-    <img class="tikztemplate" title="Hyperbola" src="" data-tikz="\begin{tikzpicture}
-\draw[gray, very thin,->] (-4,0) -- (4,-0); % x-axis
-\draw[gray, very thin,->] (0,-3) -- (0,3);  % y-axis
+\end{tikzpicture}" />
+
+<img class="tikztemplate" title="Hyperbola" src="" data-tikz="\begin{tikzpicture}
+%preamble \usepackage{amsmath}
+%preamble \usetikzlibrary{arrows}
+
+\draw[gray, very thin,-triangle 60] (-4,0) -- (4,-0); % x-axis
+\draw[gray, very thin,-triangle 60] (0,-3) -- (0,3);  % y-axis
 \draw[gray, very thin] (-2,-1.5) rectangle (2,1.5);
 \draw[red,line width=2pt] (2.5,0) -- (2.5,1.125) node[right=1pt] {$\ell=\dfrac{b^2}{a}$}; % semi latus rectum
 \draw[domain=-1.3:1.3,smooth,variable=\t,line width=2pt] plot ({2*cosh(\t)},{1.5*sinh(\t)});
@@ -90,13 +94,53 @@ body {
 \node at (-1.2,0.1) {a};
 \node at (-1.85,0.75) {b};
 \node at (-0.85,0.85) {c};
-\draw[<->, green] (0,-0.3) -- (2.5,-0.3);
+\draw[triangle 60-triangle 60, green] (0,-0.3) -- (2.5,-0.3);
 \node[green] at (1.25,-4pt) {c};
 \fill (-2.5,0) circle (0.1); % focus
 \fill (2.5,0) circle (0.1);  % focus
-\end{tikzpicture}"
-    />
-    <img class="tikztemplate" title="Histogram" src="" data-tikz="\begin{tikzpicture}
+\end{tikzpicture}" />
+
+<img class="tikztemplate" title="Ellipse" src="" data-tikz="\begin{tikzpicture}
+%preamble \usepackage{amsmath}
+%preamble \usetikzlibrary{arrows}
+
+\draw[gray, very thin,-triangle 60] (-6,0) -- (6,-0);	% x-axis
+\draw[gray, very thin,-triangle 60] (0,-4) -- (0,4);	% y-axis
+\draw[gray, very thin] (-5,-3) rectangle (5,3);
+\draw[red,line width=2pt] (-4,0) -- (-4,1.8) node[right=1pt] {$\ell=\dfrac{b^2}{a}$};	% semi latus rectum
+\draw[domain=-180:180,smooth,variable=\t,line width=2pt] plot ({5*cos(\t)},{3*sin(\t)});
+\node at (1.2,-2) {$\dfrac{x^2}{a^2} + \dfrac{y^2}{b^2}=1$ };
+\node at (-1.5,-2) {$r=\dfrac{b^2}{a - c \cos\theta}$ };
+\node at (1.5,-3.5) {$(a \cos u, b \sin u)$ };
+\draw (-4,0) -- (0,3) -- (4,0);
+\node at (2,3pt) {c};
+\node at (-4pt,1.5) {b};
+\node at (2.2,1.65) {a};
+\draw[triangle 60-triangle 60, green] (-5,-0.3) -- (0,-0.3);
+\node[green] at (-2.5,-5pt) {a};
+\fill (-4,0) circle (0.1);	% focus
+\fill (4,0) circle (0.1);	% focus
+\end{tikzpicture}" />
+
+<img class="tikztemplate" title="Parabola" src="" data-tikz="\begin{tikzpicture}
+%preamble \usepackage{amsmath}
+%preamble \usetikzlibrary{arrows}
+
+\draw[gray!50, very thin,-triangle 60] (-2,0) -- (4,-0);	% x-axis
+\draw[gray!50, very thin,-triangle 60] (0,-4) -- (0,4);	% y-axis
+\draw[red,line width=2pt] (1,0) -- (1,2) node[right=1pt] {$\ell=2a$};	% semi latus rectum
+\draw[rotate=-90,line width=2pt] (0,0) parabola (4,4);
+\draw[rotate=-90,line width=2pt] (0,0) parabola (-4,4);
+\node at (2.5,-2) {$y^2=4ax$ };
+\node at (4,-3) {$r=\dfrac{2a}{1-\cos\theta}$ };
+\node at (1.5,-3.5) {$(a t^2, 2at)$ };
+\draw (-1,-4) -- (-1,3.5) node[above=1pt] {directrix};	% directrix
+\node at (-0.5,3pt) {a};
+\node at (0.5,3pt) {c=a};
+\fill (1,0) circle (0.1);	% focus
+\end{tikzpicture}" />
+
+<img class="tikztemplate" title="Histogram" src="" data-tikz="\begin{tikzpicture}
 \begin{axis}[	tiny,
 		width=6in,
 		xtick=data,
@@ -115,9 +159,9 @@ body {
 	 	2325 \\3168 \\
 	};
 \end{axis}
-\end{tikzpicture}"
-    />
-    <img class="tikztemplate" title="Venn diagram" src="" data-tikz="\begin{tikzpicture}
+\end{tikzpicture}" />
+
+<img class="tikztemplate" title="Venn diagram" src="" data-tikz="\begin{tikzpicture}
   \begin{scope}[blend group = soft light]
     \fill[red!30!white]   ( 90:2) circle (3);
     \fill[green!30!white] (210:2) circle (3);
@@ -130,9 +174,9 @@ body {
   \node at (30:2)     {$A \cap C$};
   \node at (150:2)    {$A \cap B$};
   \node at (270:2)    {$B \cap C$};
-\end{tikzpicture}"
-    />
-    <img class="tikztemplate" title="Astronomical drawing" src="" data-tikz="\begin{tikzpicture}
+\end{tikzpicture}" />
+
+<img class="tikztemplate" title="Astronomical drawing" src="" data-tikz="\begin{tikzpicture}
 \draw (-4,0) -- (4,0);
 \draw (-4,0) circle (1.5);
 \draw (-4,-1.5) -- (4,-.2);
@@ -142,9 +186,9 @@ body {
   (4,0) circle (1) node {Sun};
 \fill[draw=black!50,top color=gray,bottom color=black!20]
   (-4,-1.5) circle (.1) node[below = 1pt] {Satellite};
-\end{tikzpicture}"
-    />
-    <img class="tikztemplate" title="tikz-3dplot package" src="" data-tikz="\begin{tikzpicture}
+\end{tikzpicture}" />
+
+<img class="tikztemplate" title="tikz-3dplot package" src="" data-tikz="\begin{tikzpicture}
 %preamble \usepackage{tikz-3dplot}
 %preamble \tdplotsetmaincoords{60}{110}
 
@@ -232,9 +276,9 @@ body {
 
 \end{scope}
 
-\end{tikzpicture}"
-    />
-    <img class="tikztemplate" title="Infinitesimal element in spherical coordinates" src="" data-tikz="\begin{tikzpicture}[font=\Large, >=stealth]
+\end{tikzpicture}" />
+
+<img class="tikztemplate" title="Infinitesimal element in spherical coordinates" src="" data-tikz="\begin{tikzpicture}[font=\Large, >=stealth]
 
 % \project{x}{y}{z} -> (x,y)
 \def\project#1#2#3{{(#2) - (#1)/2}, {(#3) - (#1)/4}};
@@ -309,9 +353,9 @@ body {
 \node[infinitesimalcolor,font=,right] at (\spherical{\myr}{\mytheta + atan(0.7/\myr)}{\myphi}) {$rd\theta$};
 \node[infinitesimalcolor,font=,above] at (\spherical{\myr + 2}{\mytheta + atan(2/\myr)}{\myphi + atan(0.9/\myr)}) {$r\sin\theta d\phi$};
 
-\end{tikzpicture}"
-    />
-    <img class="tikztemplate" title="Bead necklaces" src="" data-tikz="\begin{tikzpicture}
+\end{tikzpicture}" />
+
+<img class="tikztemplate" title="Bead necklaces" src="" data-tikz="\begin{tikzpicture}
     %preamble \usetikzlibrary{shadows}
     [font=\large,
         bead/.style args={#1 on #2}{#2!70!black, circle, ball color=#2, color=#1,
@@ -355,8 +399,8 @@ body {
 \path (0,-2) \equivalenceclass{{red,myblue,green},{red,green,blue},{green,red,myblue}};
 %\path (0,-4) \equivalenceclass{{red,green,myblue},{red,myblue,green},{green,red,myblue},{green,myblue,red},{myblue,red,green},{myblue,green,red}}; 
 
-\end{tikzpicture}"
-  /> 
+\end{tikzpicture}" />
+
   </div>
   </p>
   <p>rendersvg:<br/><img id="rendersvg" src=""></img></p>
