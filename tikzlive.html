@@ -401,6 +401,35 @@ body {
 
 \end{tikzpicture}" />
 
+<img class="tikztemplate" title="Normal distribution" src="" data-tikz="\begin{tikzpicture}
+\pgfmathdeclarefunction{gauss}{3}{%
+  \pgfmathparse{1/(#3*sqrt(2*pi))*exp(-((#1-#2)^2)/(2*#3^2))}%
+}
+\begin{axis}[
+  no markers, domain=4.5:5.7, samples=100,
+  axis lines*=left, xlabel=$x$, ylabel=$p$,
+  every axis y label/.style={at=(current axis.above origin),anchor=south},
+  every axis x label/.style={at=(current axis.right of origin),anchor=west},
+  height=5cm, width=12cm,
+  xtick={5,5.2}, ytick=\empty,
+  enlargelimits=false, clip=false, axis on top,
+  grid = major
+  ]
+  \addplot [fill=cyan!30, draw=none, domain=4.5:5.19] {gauss(x,5.2,0.1)} \closedcycle;
+  \addplot [fill=red!30, draw=none, domain=5.19:5.7] {gauss(x,5,0.1)} \closedcycle;
+  \addplot [fill=red!30, draw=none, domain=4.5:4.81] {gauss(x,5,0.1)} \closedcycle;
+  \addplot [very thick,cyan!50!black] {gauss(x,5,0.1)};
+  \addplot [very thick,cyan!50!black] {gauss(x,5.2,0.1)};
+
+  \draw [yshift=-0.6cm, latex-latex](axis cs:5,0) -- node [fill=white] {$1.96\sigma$} (axis cs:5.19,0);
+  \node at (axis cs:5.12, 1.1) {$\beta$};
+  \node at (axis cs:4.78, 0.16) {$\alpha/2$};
+  \node at (axis cs:5.22, 0.16) {$\alpha/2$};
+  \node at (axis cs:5, 4.3) {$N(5,SE)$};
+  \node at (axis cs:5.2, 4.3) {$N(\mu,SE)$};
+\end{axis}
+\end{tikzpicture}"
+  />
   </div>
   </p>
   <p>rendersvg:<br/><img id="rendersvg" src=""></img></p>
