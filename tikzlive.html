@@ -47,6 +47,7 @@ body {
 \end{tikzpicture}" />
 
 <img class="tikztemplate" title="pfgplots package - basic" src="" data-tikz="\begin{tikzpicture}
+  %preamble \usepackage{pgfplots}
   \begin{axis}[align=center, title={http://mirrors.ctan.org/graphics/pgf/contrib/ \\ pgfplots/doc/pgfplots.pdf}]
     \addplot (x, x*x);
     \addplot (x, {10 * sin(deg(x))});
@@ -54,6 +55,7 @@ body {
 \end{tikzpicture}" />
 
 <img class="tikztemplate" title="pfgplots package - advanced" src="" data-tikz="\begin{tikzpicture}
+  %preamble \usepackage{pgfplots}
   \begin{axis}[
       align=center, title={http://mirrors.ctan.org/graphics/pgf/contrib/ \\ pgfplots/doc/pgfplots.pdf},
       xlabel={$x$-axis}, ylabel={$y$-axis},
@@ -141,6 +143,7 @@ body {
 \end{tikzpicture}" />
 
 <img class="tikztemplate" title="Histogram" src="" data-tikz="\begin{tikzpicture}
+%preamble \usepackage{pgfplots}
 \begin{axis}[	tiny,
 		width=6in,
 		xtick=data,
@@ -279,6 +282,7 @@ body {
 \end{tikzpicture}" />
 
 <img class="tikztemplate" title="Infinitesimal element in spherical coordinates" src="" data-tikz="\begin{tikzpicture}[font=\Large, >=stealth]
+%preamble \usepackage{amsmath}
 
 % \project{x}{y}{z} -> (x,y)
 \def\project#1#2#3{{(#2) - (#1)/2}, {(#3) - (#1)/4}};
@@ -402,6 +406,7 @@ body {
 \end{tikzpicture}" />
 
 <img class="tikztemplate" title="Normal distribution" src="" data-tikz="\begin{tikzpicture}
+%preamble \usepackage{pgfplots}
 \pgfmathdeclarefunction{gauss}{3}{%
   \pgfmathparse{1/(#3*sqrt(2*pi))*exp(-((#1-#2)^2)/(2*#3^2))}%
 }

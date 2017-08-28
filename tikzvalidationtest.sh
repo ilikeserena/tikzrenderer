@@ -87,6 +87,7 @@ TEST GIVEN_preamble_with_missing_feature_WHEN_tikzrendersvg_THEN_feature_fails '
 
 TEST GIVEN_pgfplots_coordinates_example_WHEN_tikzrendersvg_THEN_example_renders '
 \begin{tikzpicture}
+  %preamble \usepackage{pgfplots}
   \begin{axis}
     \addplot coordinates {(0,1) (0.5,1) (1,1.2)}; 
   \end{axis} 
@@ -94,6 +95,7 @@ TEST GIVEN_pgfplots_coordinates_example_WHEN_tikzrendersvg_THEN_example_renders 
 
 TEST GIVEN_pgfplots_function_example_WHEN_tikzrendersvg_THEN_example_renders '
 \begin{tikzpicture}
+  %preamble \usepackage{pgfplots}
   \begin{axis}[xmin=-1.5, xmax=1.5, samples=101]
     \addplot[blue, ultra thick] (x, {cos(deg(x)) / (3*x^2 - pi^2)});
   \end{axis}
@@ -135,6 +137,7 @@ TEST GIVEN_draw_hyperbola_example_WHEN_tikzrendersvg_THEN_example_renders '
 
 TEST GIVEN_pgfplots_histogram_example_WHEN_tikzrendersvg_THEN_example_renders '
 \begin{tikzpicture}
+%preamble \usepackage{pgfplots}
 \begin{axis}[	tiny,
 		width=6in,
 		xtick=data,
