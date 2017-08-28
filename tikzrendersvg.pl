@@ -38,7 +38,7 @@ EOF
 
 my $cgi = new CGI();
 my $tikz = $cgi->param('tikz') || '';
-my $context = $cgi->param('context') || '';
+my $context = $cgi->param('context') || 'nocontext';
 
 $tikz =~ s#\r##gm;
 $tikz =~ s#^\s*(.*?)\s*\z#$1#m;
