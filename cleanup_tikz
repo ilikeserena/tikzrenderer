@@ -5,3 +5,6 @@ find /opt/lampp/htdocs/tikz -name "live_*" -mmin +1 -exec rm {} \;
 find /opt/lampp/htdocs/tikz -name "preview_*" -mmin +60 -exec rm {} \;
 find /opt/lampp/htdocs/tikz -name "work_*" -mmin +60 -exec rm {} \;
 find /opt/lampp/htdocs/tikz -name "tikztest_*" -mmin +60 -exec rm {} \;
+find /opt/lampp/htdocs/tikz -name "nocontext_*" -mmin +60 -exec rm {} \;
+find /opt/lampp/htdocs/tikz -name "submitted_*" -mmin +60 -exec rm {} \;
+find /opt/lampp/htdocs/tikz -name "template_*" -mtime +90 -exec rm {} \;

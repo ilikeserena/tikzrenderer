@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>JavaScript TikZ test</title>
+<title>Live TikZ Editor</title>
 <script type="text/javascript" src="jquery-3.1.1.min.js"></script>
 <style>
 body {
@@ -22,14 +22,14 @@ body {
   <p>templates:<br/>
   <div class="tikztemplateContainer">
 
-<img class="tikztemplate" title="Triangle" src="" data-tikz="\begin{tikzpicture}[blue]
+<img class="tikztemplate" title="Triangle" src="" data-tikz="\begin{tikzpicture}
   \coordinate (A) at (0,0);
   \coordinate (B) at (4,0);
   \coordinate (C) at (4,3);
   \draw[blue, ultra thick] (A) -- (B) -- (C) -- cycle;
   \path (A) node[below left] {A} -- (B) node[below right] {B} -- (C) node[above] {C};
   \path (A) -- node[below] {c} (B) -- node[right] {a} (C) -- node[above left] {b} (A);
-  \path (A) node[above right, xshift=12] {$\alpha$};
+  \path (A) node at +({atan(3/4)/2}:0.7) {$\alpha$};
   \draw[thick] (B) rectangle +(-0.4,0.4);
   \draw[thick] (A) +(1,0) arc (0:atan(3/4):1);
 \end{tikzpicture}" />
@@ -70,7 +70,7 @@ body {
 \end{tikzpicture}" />
 
 <img class="tikztemplate" title="Automaton" src="" data-tikz="\begin{tikzpicture}[shorten >=1pt,node distance=2cm,auto]
-  %preamble \usetikzlibrary{automata}
+  \usetikzlibrary{automata}
   \node[state,initial]    (q_0)                {$q_0$};
   \node[state,accepting]  (q_1) [right of=q_0] {$q_1$};
  
@@ -80,7 +80,7 @@ body {
 
 <img class="tikztemplate" title="Hyperbola" src="" data-tikz="\begin{tikzpicture}
 %preamble \usepackage{amsmath}
-%preamble \usetikzlibrary{arrows}
+\usetikzlibrary{arrows}
 
 \draw[gray, very thin,-triangle 60] (-4,0) -- (4,-0); % x-axis
 \draw[gray, very thin,-triangle 60] (0,-3) -- (0,3);  % y-axis
@@ -104,7 +104,7 @@ body {
 
 <img class="tikztemplate" title="Ellipse" src="" data-tikz="\begin{tikzpicture}
 %preamble \usepackage{amsmath}
-%preamble \usetikzlibrary{arrows}
+\usetikzlibrary{arrows}
 
 \draw[gray, very thin,-triangle 60] (-6,0) -- (6,-0);	% x-axis
 \draw[gray, very thin,-triangle 60] (0,-4) -- (0,4);	% y-axis
@@ -126,7 +126,7 @@ body {
 
 <img class="tikztemplate" title="Parabola" src="" data-tikz="\begin{tikzpicture}
 %preamble \usepackage{amsmath}
-%preamble \usetikzlibrary{arrows}
+\usetikzlibrary{arrows}
 
 \draw[gray!50, very thin,-triangle 60] (-2,0) -- (4,-0);	% x-axis
 \draw[gray!50, very thin,-triangle 60] (0,-4) -- (0,4);	% y-axis
@@ -193,7 +193,7 @@ body {
 
 <img class="tikztemplate" title="tikz-3dplot package" src="" data-tikz="\begin{tikzpicture}
 %preamble \usepackage{tikz-3dplot}
-%preamble \tdplotsetmaincoords{60}{110}
+\tdplotsetmaincoords{60}{110}
 
 \node at (0,5.5) {http://mirrors.ctan.org/graphics/pgf/contrib/};
 \node at (0,5) {tikz-3dplot/tikz-3dplot\_documentation.pdf};
@@ -433,13 +433,22 @@ body {
   \node at (axis cs:5, 4.3) {$N(5,SE)$};
   \node at (axis cs:5.2, 4.3) {$N(\mu,SE)$};
 \end{axis}
-\end{tikzpicture}"
-  />
+\end{tikzpicture}" />
+
+<img class="tikztemplate" title="Commutative Diagram" src="" data-tikz="\begin{tikzpicture}
+  \usetikzlibrary{cd}
+  \node {
+    \begin{tikzcd}
+      A \arrow{r}{f} \arrow{d}{\alpha} & B \arrow{d}{\beta} \\
+      C \arrow{r}{g} & D
+    \end{tikzcd}
+  };
+\end{tikzpicture}" />
   </div>
   </p>
   <p>rendersvg:<br/><img id="rendersvg" src=""></img></p>
   <p>tikz:<br/><textarea id="tikz" name="tikz" cols="120" rows="16">
-\begin{tikzpicture}[blue]
+\begin{tikzpicture}
   \coordinate (A) at (0,0);
   \coordinate (B) at (4,0);
   \coordinate (C) at (4,3);
@@ -457,13 +466,13 @@ body {
 $('.tikztemplate').each(function(index, element) {
   $(this).width(100);
   $(this).attr('src', 
-    'http://' + location.host + '/cgi-bin/tikzrendersvg.pl?context=live&tikz=' + encodeURIComponent($(this).attr('data-tikz')));
+    'http://' + location.host + '/cgi-bin/tikzrendersvg.pl?context=template&tikz=' + encodeURIComponent($(this).attr('data-tikz')));
 });
 
 $('.tikztemplate').click(function() {
   var tikz = $(this).attr('data-tikz');
   $('#tikz').val(tikz);
-  $('#rendersvg').attr('src', 'http://' + location.host + '/cgi-bin/tikzrendersvg.pl?context=live&tikz=' + encodeURIComponent(tikz));
+  $('#rendersvg').attr('src', 'http://' + location.host + '/cgi-bin/tikzrendersvg.pl?context=template&tikz=' + encodeURIComponent(tikz));
 });
 
 // Trigger rendering only when user is done typing, say after 1 second

@@ -454,6 +454,18 @@ TEST GIVEN_draw_Intersecting_lines_WHEN_tikzrendersvg_THEN_example_renders '
 	\fill[red] (c) circle (2pt);
 \end{tikzpicture}'
 
+
+TEST GIVEN_draw_cd_in_node_WHEN_tikzrendersvg_THEN_example_renders '
+\begin{tikzpicture}
+  \usetikzlibrary{cd}
+  \node {
+    \begin{tikzcd}
+      A \arrow{r}{f} \arrow{d}{\alpha} & B \arrow{d}{\beta} \\
+      C \arrow{r}{g} & D
+    \end{tikzcd}
+  };
+\end{tikzpicture}'
+
 # Clean up if we get here
 sudo find /opt/lampp/htdocs/tikz -name "test_*" -exec rm {} \;
 rm -r out/
