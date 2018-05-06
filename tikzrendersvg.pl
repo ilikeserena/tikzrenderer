@@ -12,6 +12,7 @@ use Time::HiRes qw(gettimeofday);
 
 undef $/;
 
+my $PDFLATEX_TIMEOUT = 10;
 my $XAMPP_DIR = "/opt/lampp";
 my $OUT_DIR = "$XAMPP_DIR/htdocs/tikz";
 my $CGI_DIR = "$XAMPP_DIR/cgi-bin";
@@ -232,7 +233,7 @@ sub renderLatex
     unlink $tmp_pdf2svg_stderr;
     unlink $tmp_pdffile;
     unlink $tmp_svgfile;
-    $success = executeCmd("unset LD_LIBRARY_PATH ; pdflatex -no-shell-escape -halt-on-error -file-line-error -output-directory $TMP_DIR $texfile"
+    $success = executeCmd("unset LD_LIBRARY_PATH ; timeout $PDFLATEX_TIMEOUT pdflatex -no-shell-escape -halt-on-error -file-line-error -output-directory $TMP_DIR $texfile"
         , $tmp_pdflatex_stderr) if $success;
 
     $success = executeCmd("unset LD_LIBRARY_PATH ; pdf2svg $tmp_pdffile $tmp_svgfile"
