@@ -444,6 +444,22 @@ body {
     \end{tikzcd}
   };
 \end{tikzpicture}" />
+
+<img class="tikztemplate" title="Karnaugh Map" src="" data-tikz="\begin{tikzpicture}
+  %preamble \usepackage{karnaugh-map}
+  \node {
+    \begin{karnaugh-map}[4][4][1][$ba$][$dc$]
+      \minterms{0,1,2,3,8,10}
+      \terms{13}{$X^*$}
+      \indeterminants{15}
+      \autoterms[0]
+      \implicantcorner[0,2]
+      \implicant{1}{3}[0,1,2,3]
+      \implicantedge{4}{12}{6}{14}[1,3]
+      \implicant{13}{15}[0,2]
+    \end{karnaugh-map}
+  };
+\end{tikzpicture}" />
   </div>
   </p>
   <p>rendersvg:<br/><img id="rendersvg" src=""></img></p>
