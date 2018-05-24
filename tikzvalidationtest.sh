@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-SCRIPT_LOCATION=${PWD##*/}
+SCRIPT_LOCATION=cgi-bin/${PWD##*/cgi-bin/}
 echo "TESTING scripts in '$SCRIPT_LOCATION'"
 
 function finish {

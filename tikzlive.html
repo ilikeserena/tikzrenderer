@@ -1,5 +1,7 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <title>Live TikZ Editor</title>
 <script type="text/javascript" src="jquery-3.1.1.min.js"></script>
 <style>
@@ -464,13 +466,12 @@ body {
   <p>rendersvg:<br/><img id="rendersvg" src=""></img></p>
   <p>tikz:<br/><textarea id="tikz" name="tikz" cols="120" rows="16">
 \begin{tikzpicture}
-  \coordinate (A) at (0,0);
-  \coordinate (B) at (4,0);
-  \coordinate (C) at (4,3);
+  \coordinate[label=left:A] (A) at (0,0);
+  \coordinate[label=right:B] (B) at (4,0);
+  \coordinate[label=C] (C) at (4,3);
   \draw[blue, ultra thick] (A) -- (B) -- (C) -- cycle;
-  \path (A) node[below left] {A} -- (B) node[below right] {B} -- (C) node[above] {C};
   \path (A) -- node[below] {c} (B) -- node[right] {a} (C) -- node[above left] {b} (A);
-  \path (A) node[above right, xshift=12] {$\alpha$};
+  \path (A) node at +({atan(3/4)/2}:0.7) {$\alpha$};
   \draw[thick] (B) rectangle +(-0.4,0.4);
   \draw[thick] (A) +(1,0) arc (0:atan(3/4):1);
 \end{tikzpicture}
@@ -481,13 +482,13 @@ body {
 $('.tikztemplate').each(function(index, element) {
   $(this).width(100);
   $(this).attr('src', 
-    'http://' + location.host + '/cgi-bin/tikzrendersvg.pl?context=template&tikz=' + encodeURIComponent($(this).attr('data-tikz')));
+    'http://' + location.host + '/cgi-bin/tikzrenderer/tikzrendersvg.pl?context=template&tikz=' + encodeURIComponent($(this).attr('data-tikz')));
 });
 
 $('.tikztemplate').click(function() {
   var tikz = $(this).attr('data-tikz');
   $('#tikz').val(tikz);
-  $('#rendersvg').attr('src', 'http://' + location.host + '/cgi-bin/tikzrendersvg.pl?context=template&tikz=' + encodeURIComponent(tikz));
+  $('#rendersvg').attr('src', 'http://' + location.host + '/cgi-bin/tikzrenderer/tikzrendersvg.pl?context=template&tikz=' + encodeURIComponent(tikz));
 });
 
 // Trigger rendering only when user is done typing, say after 1 second
@@ -508,7 +509,7 @@ $('#tikz').keydown(function() {
 // User is "done typing", make a rendering request
 function doneTyping() {
   var tikz = $('#tikz').val();
-  $('#rendersvg').attr('src', 'http://' + location.host + '/cgi-bin/tikzrendersvg.pl?context=live&tikz=' + encodeURIComponent(tikz));
+  $('#rendersvg').attr('src', 'http://' + location.host + '/cgi-bin/tikzrenderer/tikzrendersvg.pl?context=live&tikz=' + encodeURIComponent(tikz));
 }
 
 // Initial rendering request

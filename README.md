@@ -26,23 +26,14 @@ where `{tikzUri}` is an URI-encoded picture of the form `\begin{tikzpicture} ...
 
  ```bash
 cd /opt/lampp/cgi-bin
-# Save whatever's there
-sudo tar czpf ../cgi.tgz *
-sudo rm -rf *
-# Retrieve the tikz renderer functionality
-sudo git clone https://github.com/ilikeserena/tikzrenderer.git ./
-# Restore what we saved before
-sudo tar xzpf ../cgi.tgz
-sudo rm ../cgi.tgz
+git clone https://github.com/ilikeserena/tikzrenderer.git
 ```
 5. Create relevant directories, link files, and set permissions:
 
  ```bash
-cd /opt/lampp/htdocs
-sudo mkdir tikz
-sudo mkdir tikz/tmp
-sudo chown -R daemon:daemon tikz
-sudo ln -s /opt/lampp/cgi-bin/*.png /opt/lampp/cgi-bin/*.js /opt/lampp/cgi-bin/tikzlive.html /opt/lampp/htdocs/tikz/
+sudo mkdir -p /opt/lampp/htdocs/tikz/tmp
+sudo ln -s /opt/lampp/cgi-bin/tikzrenderer/*.png /opt/lampp/cgi-bin/tikzrenderer/*.js /opt/lampp/cgi-bin/tikzrenderer/tikzlive.html /opt/lampp/htdocs/tikz/
+sudo chown -R daemon:daemon /opt/lampp/htdocs/tikz
 ```
 6. Install TIKZ software (Ubuntu):
 
@@ -54,7 +45,7 @@ sudo apt install lacheck
 sudo apt install imagemagick
 ```
 7. Verify installation with the following address in a web browser:
-   "http://localhost/cgi-bin/tikztest.pl".
+   "http://localhost/cgi-bin/tikzrenderer/tikztest.pl".
    It should show a page in which you can enter a tikz picture and submit it.
    For instance:
  ```latex
@@ -79,7 +70,7 @@ AddEncoding gzip svgz
    
 9. Set up a cron job to get rid of spammy tikz requests.
  ```bash
-sudo ln -s /opt/lampp/cgi-bin/cleanup_tikz /etc/cron.hourly/
+sudo ln -s /opt/lampp/cgi-bin/tikzrenderer/cleanup_tikz /etc/cron.hourly/
 ```
    Verify it works by checking `/var/log/syslog` that should show "Running cleanup_tikz" after an hour, which should remove old files in the fashion specified in it.
    
