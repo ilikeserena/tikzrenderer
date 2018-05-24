@@ -23,11 +23,10 @@ body {
   <div class="tikztemplateContainer">
 
 <img class="tikztemplate" title="Triangle" src="" data-tikz="\begin{tikzpicture}
-  \coordinate (A) at (0,0);
-  \coordinate (B) at (4,0);
-  \coordinate (C) at (4,3);
+  \coordinate[label=left:A] (A) at (0,0);
+  \coordinate[label=right:B] (B) at (4,0);
+  \coordinate[label=C] (C) at (4,3);
   \draw[blue, ultra thick] (A) -- (B) -- (C) -- cycle;
-  \path (A) node[below left] {A} -- (B) node[below right] {B} -- (C) node[above] {C};
   \path (A) -- node[below] {c} (B) -- node[right] {a} (C) -- node[above left] {b} (A);
   \path (A) node at +({atan(3/4)/2}:0.7) {$\alpha$};
   \draw[thick] (B) rectangle +(-0.4,0.4);
