@@ -31,6 +31,7 @@ git clone https://github.com/ilikeserena/tikzrenderer.git
 5. Create relevant directories, link files, and set permissions:
 
  ```bash
+cp /opt/lampp/cgi-bin/tikzrenderer/*.pl /opt/lampp/cgi-bin/
 sudo mkdir -p /opt/lampp/htdocs/tikz/tmp
 sudo ln -s /opt/lampp/cgi-bin/tikzrenderer/*.png /opt/lampp/cgi-bin/tikzrenderer/*.js /opt/lampp/cgi-bin/tikzrenderer/tikzlive.html /opt/lampp/htdocs/tikz/
 sudo chown -R daemon:daemon /opt/lampp/htdocs/tikz
@@ -45,7 +46,7 @@ sudo apt install lacheck
 sudo apt install imagemagick
 ```
 7. Verify installation with the following address in a web browser:
-   "http://localhost/cgi-bin/tikzrenderer/tikztest.pl".
+   "http://localhost/cgi-bin/tikztest.pl".
    It should show a page in which you can enter a tikz picture and submit it.
    For instance:
  ```latex

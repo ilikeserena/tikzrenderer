@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-SCRIPT_LOCATION=cgi-bin/${PWD##*/cgi-bin/}
+SCRIPT_LOCATION=cgi-bin
 echo "TESTING scripts in '$SCRIPT_LOCATION'"
 
 function finish {
@@ -465,6 +465,24 @@ TEST GIVEN_draw_cd_in_node_WHEN_tikzrendersvg_THEN_example_renders '
     \end{tikzcd}
   };
 \end{tikzpicture}'
+
+TEST GIVEN_draw_karnaugh_map_in_node_WHEN_tikzrendersvg_THEN_example_renders '
+\begin{tikzpicture}
+  %preamble \usepackage{karnaugh-map}
+  \node {
+    \begin{karnaugh-map}[4][4][1][$ba$][$dc$]
+      \minterms{0,1,2,3,8,10}
+      \terms{13}{$X^*$}
+      \indeterminants{15}
+      \autoterms[0]
+      \implicantcorner[0,2]
+      \implicant{1}{3}[0,1,2,3]
+      \implicantedge{4}{12}{6}{14}[1,3]
+      \implicant{13}{15}[0,2]
+    \end{karnaugh-map}
+  };
+\end{tikzpicture}'
+
 
 # Clean up if we get here
 sudo find /opt/lampp/htdocs/tikz -name "test_*" -exec rm {} \;
