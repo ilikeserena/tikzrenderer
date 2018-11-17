@@ -12,7 +12,7 @@ Rendering is implemented by <img> requests of the form:
 ```
 where `{tikzUri}` is an URI-encoded picture of the form `\begin{tikzpicture} ... \end{tikzpicture}`.
 
-# SETUP (verified on Ubuntu 16.04 LTS 64-bits)
+# SETUP (verified on Ubuntu 16.04+18.04 LTS 64-bits)
 
 1. Install lampp (abbreviation for Linux-Apache-MySql-Php-Perl) on a linux system.
    Download from https://www.apachefriends.org/download.html.
@@ -26,12 +26,13 @@ where `{tikzUri}` is an URI-encoded picture of the form `\begin{tikzpicture} ...
 
  ```bash
 cd /opt/lampp/cgi-bin
-git clone https://github.com/ilikeserena/tikzrenderer.git
+sudo apt install git
+sudo git clone https://github.com/ilikeserena/tikzrenderer.git
 ```
 5. Create relevant directories, link files, and set permissions:
 
  ```bash
-cp /opt/lampp/cgi-bin/tikzrenderer/*.pl /opt/lampp/cgi-bin/
+sudo cp /opt/lampp/cgi-bin/tikzrenderer/*.pl /opt/lampp/cgi-bin/
 sudo mkdir -p /opt/lampp/htdocs/tikz/tmp
 sudo ln -s /opt/lampp/cgi-bin/tikzrenderer/*.png /opt/lampp/cgi-bin/tikzrenderer/*.js /opt/lampp/cgi-bin/tikzrenderer/tikzlive.html /opt/lampp/htdocs/tikz/
 sudo chown -R daemon:daemon /opt/lampp/htdocs/tikz
@@ -39,26 +40,21 @@ sudo chown -R daemon:daemon /opt/lampp/htdocs/tikz
 6. Install TIKZ software (Ubuntu):
 
  ```bash
-sudo apt install texlive-latex-base
 sudo apt install texlive-latex-extra
 sudo apt install pdf2svg
 sudo apt install lacheck
 sudo apt install imagemagick
 ```
 7. Verify installation with the following address in a web browser:
-   "http://localhost/cgi-bin/tikztest.pl".
-   It should show a page in which you can enter a tikz picture and submit it.
+   "http://localhost/tikz/tikzlive.html".
+   It should show a live rendered .svg file that is updated whenever you stop typing for about a second.
    For instance:
  ```latex
 \begin{tikzpicture}
 \draw (0,0) -- (1,1);
 \end{tikzpicture}
 ```
-   As a result we should see a .png image and a .svg image (see next item if SVG does not work).
-
-   Alternatively, we can use:
-   "http://localhost/tikz/tikzlive.html".
-   It should show a live rendered .svg file that is updated whenever you stop typing for about a second.
+   As a result we should see a .svg image (see next item if SVG does not work).
    
 8. Add support for SVG to the web server if it doesn't work.
    Edit /opt/lampp/etc/httpd.conf and add in the `<IfModule mime_module>` section:
@@ -66,8 +62,8 @@ sudo apt install imagemagick
 AddType image/svg+xml svg svgz
 AddEncoding gzip svgz
 ```
-   Restart Apache with `sudo /opt/lampp/lampp reloadapache`.
-   Verify with the previous step (`tikztest.pl`) if .svg images work now.
+   Restart Apache with e.g. `sudo /opt/lampp/lampp reloadapache`.
+   Verify with the previous step (`tikzlive.html`) if .svg images work now.
    
 9. Set up a cron job to get rid of spammy tikz requests.
  ```bash
