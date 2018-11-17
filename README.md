@@ -46,19 +46,15 @@ sudo apt install lacheck
 sudo apt install imagemagick
 ```
 7. Verify installation with the following address in a web browser:
-   "http://localhost/cgi-bin/tikztest.pl".
-   It should show a page in which you can enter a tikz picture and submit it.
+   "http://localhost/tikz/tikzlive.html".
+   It should show a live rendered .svg file that is updated whenever you stop typing for about a second.
    For instance:
  ```latex
 \begin{tikzpicture}
 \draw (0,0) -- (1,1);
 \end{tikzpicture}
 ```
-   As a result we should see a .png image and a .svg image (see next item if SVG does not work).
-
-   Alternatively, we can use:
-   "http://localhost/tikz/tikzlive.html".
-   It should show a live rendered .svg file that is updated whenever you stop typing for about a second.
+   As a result we should see a .svg image (see next item if SVG does not work).
    
 8. Add support for SVG to the web server if it doesn't work.
    Edit /opt/lampp/etc/httpd.conf and add in the `<IfModule mime_module>` section:
@@ -66,8 +62,8 @@ sudo apt install imagemagick
 AddType image/svg+xml svg svgz
 AddEncoding gzip svgz
 ```
-   Restart Apache with `sudo /opt/lampp/lampp reloadapache`.
-   Verify with the previous step (`tikztest.pl`) if .svg images work now.
+   Restart Apache with e.g. `sudo /opt/lampp/lampp reloadapache`.
+   Verify with the previous step (`tikzlive.html`) if .svg images work now.
    
 9. Set up a cron job to get rid of spammy tikz requests.
  ```bash
