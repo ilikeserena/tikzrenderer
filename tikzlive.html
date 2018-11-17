@@ -30,9 +30,11 @@ body {
   \coordinate[label=C] (C) at (4,3);
   \draw[blue, ultra thick] (A) -- (B) -- (C) -- cycle;
   \path (A) -- node[below] {c} (B) -- node[right] {a} (C) -- node[above left] {b} (A);
-  \path (A) node at +({atan(3/4)/2}:0.7) {$\alpha$};
-  \draw[thick] (B) rectangle +(-0.4,0.4);
-  \draw[thick] (A) +(1,0) arc (0:atan(3/4):1);
+  \draw[thick,rotate=90] (B) rectangle +(0.4,0.4);
+  \draw[thick] (A) +(0:1) arc (0:atan2(3,4):1);
+  \path (A) node at +({atan2(3,4)/2}:0.7) {$\alpha$};
+  \draw[thick] (C) +({-90}:1) arc (-90:atan2(-3,-4):1);
+  \path (C) node at +({(-90 + atan2(-3,-4))/2}:0.7) {$\gamma$};
 \end{tikzpicture}" />
 
 <img class="tikztemplate" title="TikZ function graph" src="" data-tikz="\begin{tikzpicture}
