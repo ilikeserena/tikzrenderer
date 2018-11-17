@@ -17,12 +17,18 @@ body {
 .tikztemplate:active {
     background-color: #c0c0c0;
 }
+textarea
+{
+  border:1px solid #999999;
+  width:100%;
+  margin:5px 0;
+  padding:3px;
+}
 </style>
 </head>
 
 <body>
-  <p>templates:<br/>
-  <div class="tikztemplateContainer">
+<div class="tikztemplateContainer">
 
 <img class="tikztemplate" title="Triangle" src="" data-tikz="\begin{tikzpicture}
   \coordinate[label=left:A] (A) at (0,0);
@@ -463,10 +469,9 @@ body {
     \end{karnaugh-map}
   };
 \end{tikzpicture}" />
-  </div>
-  </p>
-  <p>rendersvg:<br/><img id="rendersvg" src=""></img></p>
-  <p>tikz:<br/><textarea id="tikz" name="tikz" cols="120" rows="16">
+</div>
+
+<div><textarea id="tikz" name="tikz" cols="120" rows="16">
 \begin{tikzpicture}
   \coordinate[label=left:A] (A) at (0,0);
   \coordinate[label=right:B] (B) at (4,0);
@@ -477,7 +482,9 @@ body {
   \draw[thick] (B) rectangle +(-0.4,0.4);
   \draw[thick] (A) +(1,0) arc (0:atan(3/4):1);
 \end{tikzpicture}
-  </textarea></p>
+</textarea></div>
+
+<div><img id="rendersvg" src=""></img></div>
 
 <script>
 
