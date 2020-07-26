@@ -13,9 +13,8 @@ use Time::HiRes qw(gettimeofday);
 undef $/;
 
 my $PDFLATEX_TIMEOUT = 10;
-my $XAMPP_DIR = "/opt/lampp";
-my $OUT_DIR = "$XAMPP_DIR/htdocs/tikz";
-my $CGI_DIR = "$XAMPP_DIR/cgi-bin";
+my $HTML_DIR = "/var/www/html/tikz";
+my $OUT_DIR = "$HTML_DIR";
 my $TMP_DIR = "$OUT_DIR/tmp";
 
 my $PREAMBLE = <<'EOF';
@@ -111,7 +110,7 @@ if ($success)
 else
 {
     print "Content-Type: text/png\n\n";
-    open(IMG, "$CGI_DIR/error.png") or die "Cannot read from '$CGI_DIR/error.png': $!";
+    open(IMG, "$HTML_DIR/error.png") or die "Cannot read from '$HTML_DIR/error.png': $!";
     print while <IMG>;
     close(IMG);
 }

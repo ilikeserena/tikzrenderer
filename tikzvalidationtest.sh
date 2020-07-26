@@ -1,6 +1,7 @@
 #!/bin/bash -e
 
 SCRIPT_LOCATION=cgi-bin
+HTML_TIKZ_DIR=/var/www/html/tikz
 echo "TESTING scripts in '$SCRIPT_LOCATION'"
 
 function finish {
@@ -15,7 +16,7 @@ function finish {
 trap finish EXIT
 
 # Flush cache and previous output
-sudo find /opt/lampp/htdocs/tikz -name "test_*" -exec rm {} \;
+sudo find "$HTML_TIKZ_DIR" -name "test_*" -exec rm {} \;
 [ -d out/ ] && rm -r out/
 mkdir out/
 
@@ -485,6 +486,6 @@ TEST GIVEN_draw_karnaugh_map_in_node_WHEN_tikzrendersvg_THEN_example_renders '
 
 
 # Clean up if we get here
-sudo find /opt/lampp/htdocs/tikz -name "test_*" -exec rm {} \;
+sudo find "$HTML_TIKZ_DIR" -name "test_*" -exec rm {} \;
 rm -r out/
 

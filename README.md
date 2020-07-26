@@ -12,32 +12,35 @@ Rendering is implemented by <img> requests of the form:
 ```
 where `{tikzUri}` is an URI-encoded picture of the form `\begin{tikzpicture} ... \end{tikzpicture}`.
 
-# SETUP (verified on Ubuntu 16.04+18.04 LTS 64-bits)
+# SETUP (verified on 18.04 LTS 64-bits on WSL in Windows 10)
 
-1. Install lampp (abbreviation for Linux-Apache-MySql-Php-Perl) on a linux system.
-   Download from https://www.apachefriends.org/download.html.
-2. Configure lampp to run CGI scripts by changing `/opt/lampp/etc/httpd.conf`.
-   It should say `Options ExecCGI` in the `<Directory "/opt/lampp/cgi-bin">` section.
-3. Start Apache with `sudo /opt/lampp/lampp startapache`.
-   Verify Apache works by entering "http://localhost" in the address bar of a web browser.
-   Verify CGI works by following the directions in `cgi-bin/test-cgi`
-   and entering "http://localhost/cgi-bin/test-cgi" in the address bar of a web browser.
-4. Install the tikz renderer functionality with:
+1. Install apache2 and enable PerlCGI
 
  ```bash
-cd /opt/lampp/cgi-bin
+sudo apt install apache2
+sudo apt install libcgi-session-perl
+sudo a2enmod cgid
+sudo service apache2 restart
+``` 
+2. Get the tikz renderer functionality with:
+
+ ```bash
 sudo apt install git
 sudo git clone https://github.com/ilikeserena/tikzrenderer.git
 ```
-5. Create relevant directories, link files, and set permissions:
+3. Create relevant directories, link files, and set permissions:
 
  ```bash
-sudo cp /opt/lampp/cgi-bin/tikzrenderer/*.pl /opt/lampp/cgi-bin/
-sudo mkdir -p /opt/lampp/htdocs/tikz/tmp
-sudo ln -s /opt/lampp/cgi-bin/tikzrenderer/*.png /opt/lampp/cgi-bin/tikzrenderer/*.js /opt/lampp/cgi-bin/tikzrenderer/tikzlive.html /opt/lampp/htdocs/tikz/
-sudo chown -R daemon:daemon /opt/lampp/htdocs/tikz
+SOURCE=$PWD/tikzrenderer
+CGI_BIN=/usr/lib/cgi-bin
+HTML=/var/www/html
+sudo cp -R $SOURCE/*.pl $SOURCE/*.sty $CGI_BIN/
+sudo mkdir -p $HTML/tikz/tmp
+sudo cp $SOURCE/favicon.ico $HTML/
+sudo cp $SOURCE/*.png $SOURCE/*.js $SOURCE/tikzlive.html $HTML/tikz/
+sudo chown -R www-data:www-data $HTML/tikz
 ```
-6. Install TIKZ software (Ubuntu):
+4. Install TIKZ software (Ubuntu):
 
  ```bash
 sudo apt install texlive-latex-extra
@@ -45,7 +48,7 @@ sudo apt install pdf2svg
 sudo apt install lacheck
 sudo apt install imagemagick
 ```
-7. Verify installation with the following address in a web browser:
+5. Verify installation with the following address in a web browser:
    "http://localhost/tikz/tikzlive.html".
    It should show a live rendered .svg file that is updated whenever you stop typing for about a second.
    For instance:
@@ -55,26 +58,13 @@ sudo apt install imagemagick
 \end{tikzpicture}
 ```
    As a result we should see a .svg image (see next item if SVG does not work).
-   
-8. Add support for SVG to the web server if it doesn't work.
-   Edit /opt/lampp/etc/httpd.conf and add in the `<IfModule mime_module>` section:
- ```text
-AddType image/svg+xml svg svgz
-AddEncoding gzip svgz
-```
-   Restart Apache with e.g. `sudo /opt/lampp/lampp reloadapache`.
-   Verify with the previous step (`tikzlive.html`) if .svg images work now.
-   
-9. Set up a cron job to get rid of spammy tikz requests.
+
+6. Set up a cron job to get rid of spammy tikz requests.
+
  ```bash
-sudo ln -s /opt/lampp/cgi-bin/tikzrenderer/cleanup_tikz /etc/cron.hourly/
+sudo cp $SOURCE/cleanup_tikz /etc/cron.hourly/
 ```
    Verify it works by checking `/var/log/syslog` that should show "Running cleanup_tikz" after an hour, which should remove old files in the fashion specified in it.
    
-10. Configure to run Apache automatically.
-    The following procedure appears to be outdated, but it worked for me.
- ```bash
-sudo ln -s /opt/lampp/lampp /etc/init.d/lampp
-sudo update-rc.d lampp start 80 3 5 . stop 30 0 1 2 6 .
-```
-   Verify by restarting the machine and checking if the `tikztest.pl` step still works.
+7. Configure to run Apache automatically.
+   Verify by restarting the machine and checking if the `tikzlive.html` step still works.

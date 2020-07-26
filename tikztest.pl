@@ -9,8 +9,8 @@ use Time::HiRes qw(gettimeofday);
 use POSIX qw(strftime);
 use Digest::MD5 qw(md5 md5_hex md5_base64);
 
-my $XAMPP_DIR = "/opt/lampp";
-my $OUT_DIR = "$XAMPP_DIR/htdocs/tikz";
+my $HTML_DIR = "/var/www/html/tikz";
+my $OUT_DIR = "$HTML_DIR";
 my $TMP_DIR = "$OUT_DIR/tmp";
 
 my $cgi = new CGI;

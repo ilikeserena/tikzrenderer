@@ -491,13 +491,13 @@ textarea
 $('.tikztemplate').each(function(index, element) {
   $(this).width(100);
   $(this).attr('src', 
-    'http://' + location.host + '/cgi-bin/tikzrenderer/tikzrendersvg.pl?context=template&tikz=' + encodeURIComponent($(this).attr('data-tikz')));
+    'http://' + location.host + '/cgi-bin/tikzrendersvg.pl?context=template&tikz=' + encodeURIComponent($(this).attr('data-tikz')));
 });
 
 $('.tikztemplate').click(function() {
   var tikz = $(this).attr('data-tikz');
   $('#tikz').val(tikz);
-  $('#rendersvg').attr('src', 'http://' + location.host + '/cgi-bin/tikzrenderer/tikzrendersvg.pl?context=template&tikz=' + encodeURIComponent(tikz));
+  $('#rendersvg').attr('src', 'http://' + location.host + '/cgi-bin/tikzrendersvg.pl?context=template&tikz=' + encodeURIComponent(tikz));
 });
 
 // Trigger rendering only when user is done typing, say after 1 second
@@ -518,7 +518,7 @@ $('#tikz').keydown(function() {
 // User is "done typing", make a rendering request
 function doneTyping() {
   var tikz = $('#tikz').val();
-  $('#rendersvg').attr('src', 'http://' + location.host + '/cgi-bin/tikzrenderer/tikzrendersvg.pl?context=live&tikz=' + encodeURIComponent(tikz));
+  $('#rendersvg').attr('src', 'http://' + location.host + '/cgi-bin/tikzrendersvg.pl?context=live&tikz=' + encodeURIComponent(tikz));
 }
 
 // Initial rendering request
