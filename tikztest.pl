@@ -96,11 +96,15 @@ else
 	my $time_start = $s + $us / 1e6;
 	printf "%s.%06d\n", strftime("%H:%M:%S", localtime($s)), $us;
 
+        if ($tikz =~ m#\\documentclass#)
+        {
+print FH $tikz;
+        }
+        else
+        {
 print FH <<EOF;
 \\documentclass[border=10pt]{standalone}
-\\usepackage{amsmath}
 \\usepackage{tikz}
-\\usepackage{pgfplots}
 
 % Protect pdflatex from hanging when we have a pending '[' after begin{tikzpicture}
 % See: http://tex.stackexchange.com/questions/338869/pdflatex-hangs-on-a-pending
@@ -114,15 +118,16 @@ $tikz
 
 \\end{document}
 EOF
+        }
 	close FH;
 
-	$success = executeCmd("unset LD_LIBRARY_PATH ; pdflatex -no-shell-escape -halt-on-error -file-line-error -output-directory $TMP_DIR $tmptexfile"
+	$success = executeCmd("pdflatex -no-shell-escape -halt-on-error -file-line-error -output-directory $TMP_DIR $tmptexfile"
 			, $tmp_pdflatex_stderr);
 
-	$success = executeCmd("unset LD_LIBRARY_PATH ; pdf2svg $tmppdffile $tmpsvgfile"
+	$success = executeCmd("pdf2svg $tmppdffile $tmpsvgfile"
 				, $tmp_pdf2svg_stderr) if $success;
 
-	$success = executeCmd("unset LD_LIBRARY_PATH ; convert -density 150 $tmppdffile -trim -quality 90 $tmppngfile"
+	$success = executeCmd("convert -density 150 $tmppdffile -trim -quality 90 -flatten $tmppngfile"
 				, $tmp_convert_stderr) if $success;
 
 	if ($success)

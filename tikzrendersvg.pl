@@ -239,10 +239,10 @@ sub renderLatex
     unlink $tmp_pdf2svg_stderr;
     unlink $tmp_pdffile;
     unlink $tmp_svgfile;
-    $success = executeCmd("unset LD_LIBRARY_PATH ; timeout $PDFLATEX_TIMEOUT pdflatex -no-shell-escape -halt-on-error -file-line-error -output-directory $TMP_DIR $texfile"
+    $success = executeCmd("timeout $PDFLATEX_TIMEOUT pdflatex -no-shell-escape -halt-on-error -file-line-error -output-directory $TMP_DIR $texfile"
         , $tmp_pdflatex_stderr) if $success;
 
-    $success = executeCmd("unset LD_LIBRARY_PATH ; pdf2svg $tmp_pdffile $tmp_svgfile"
+    $success = executeCmd("pdf2svg $tmp_pdffile $tmp_svgfile"
             , $tmp_pdf2svg_stderr) if $success;
 
     if ($success)
@@ -253,7 +253,7 @@ sub renderLatex
         print "\n";
     }
 
-    $success = executeCmd("unset LD_LIBRARY_PATH ; gzip -c $svgfile > $svgzfile"
+    $success = executeCmd("gzip -c $svgfile > $svgzfile"
             , "$svgzfile.stderr") if $success;
 
     return $success;
