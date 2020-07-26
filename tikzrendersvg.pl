@@ -40,7 +40,6 @@ my $tikz = $cgi->param('tikz') || '';
 my $context = $cgi->param('context') || 'nocontext';
 
 $tikz = trim($tikz);
-$PREAMBLE = getPreamble($tikz);
 my $document = md5_hex($tikz);
 $document = "${context}_${document}" if $context;
 
@@ -79,10 +78,12 @@ else
 {
     if ($tikz =~ m#\\documentclass#)
     {
+        $PREAMBLE = undef;
         $success = renderDocument($tikz);
     }
     else
     {
+        $PREAMBLE = getPreamble($tikz);
         $success = renderTikz();
     }
 }
@@ -176,7 +177,8 @@ sub generateLatexError
         print $FH "\\begin{document}\n";
         open (ERRFH, '<:encoding(UTF-8)', $error_file)
             or ($success = 0, print("Could not read file: $!\n"));
-        my $lines_preamble = ($PREAMBLE =~ tr#\n##) + 1;
+        my $lines_preamble = 0;
+        $lines_preamble = ($PREAMBLE =~ tr#\n##) + 1 if $PREAMBLE;
         my $content = <ERRFH>;
         close ERRFH;
 
