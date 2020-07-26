@@ -29,6 +29,7 @@ my $PREAMBLE = <<'EOF';
 
 \begin{document}
 EOF
+
 my $POSTAMBLE = <<'EOF';
 
 \end{document}
@@ -38,8 +39,7 @@ my $cgi = new CGI();
 my $tikz = $cgi->param('tikz') || '';
 my $context = $cgi->param('context') || 'nocontext';
 
-$tikz =~ s#\r##gm;
-$tikz =~ s#^\s*(.*?)\s*\z#$1#m;
+$tikz = trim($tikz);
 $PREAMBLE = getPreamble($tikz);
 my $document = md5_hex($tikz);
 $document = "${context}_${document}" if $context;
@@ -77,7 +77,14 @@ if (-f $svgzfile)
 }
 else
 {
-    $success = renderTikz();
+    if ($tikz =~ m#\\documentclass#)
+    {
+        $success = renderDocument($tikz);
+    }
+    else
+    {
+        $success = renderTikz();
+    }
 }
 
 # done, restore STDOUT/STDERR
@@ -261,6 +268,15 @@ sub printTimestamp
 }
 
 
+sub trim
+{
+    my $content = shift;
+    $content =~ s#\r##gm;
+    $content =~ s#^\s*(.*?)\s*\z#$1#m;
+    return $content;
+}
+
+
 sub getPreamble
 {
     my $content = shift;
@@ -299,6 +315,17 @@ EOF
 
 sub renderTikz
 {
+    my $latex = <<EOF;
+$PREAMBLE
+$tikz
+$POSTAMBLE
+EOF
+    return renderDocument($latex);
+}
+
+sub renderDocument
+{
+    my $latex = shift;
     my $success = 1;
 
     # Remove previous files if left behind
@@ -315,11 +342,7 @@ sub renderTikz
         my $time_start = $s + $us / 1e6;
         printTimestamp();
 
-        print $FH <<EOF;
-$PREAMBLE
-$tikz
-$POSTAMBLE
-EOF
+        print $FH $latex;
         close $FH;
 
         my $tmp_lacheck_stderr = "$TMP_DIR/$document.lacheck.stderr";
