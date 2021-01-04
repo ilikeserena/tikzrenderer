@@ -57,7 +57,7 @@ sudo apt install imagemagick
 \draw (0,0) -- (1,1);
 \end{tikzpicture}
 ```
-   As a result we should see a .svg image (see next item if SVG does not work).
+   As a result we should see a .svg image.
 
 6. Set up a cron job to get rid of spammy tikz requests.
 
