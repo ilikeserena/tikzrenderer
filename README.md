@@ -12,7 +12,7 @@ Rendering is implemented by <img> requests of the form:
 ```
 where `{tikzUri}` is an URI-encoded picture of the form `\begin{tikzpicture} ... \end{tikzpicture}`.
 
-# SETUP (verified on 18.04 LTS 64-bits on WSL in Windows 10)
+# SETUP (Linux Ubuntu)
 
 1. Install apache2 and enable PerlCGI
 
@@ -65,6 +65,3 @@ sudo apt install imagemagick
 sudo cp $SOURCE/cleanup_tikz /etc/cron.hourly/
 ```
    Verify it works by checking `/var/log/syslog` that should show "Running cleanup_tikz" after an hour, which should remove old files in the fashion specified in it.
-   
-7. Configure to run Apache automatically.
-   Verify by restarting the machine and checking if the `tikzlive.html` step still works.
