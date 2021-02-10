@@ -43,15 +43,37 @@ textarea
   \path (C) node at +({(-90 + atan2(-3,-4))/2}:0.7) {$\gamma$};
 \end{tikzpicture}" />
 
+<img class="tikztemplate" title="Intersections and angles" src="" data-tikz='\begin{tikzpicture}
+  %preamble \usetikzlibrary {angles,calc,quotes}
+  \node at (.5,4) {usetikzlibrary\{angles,calc,quotes\}};
+
+  \node (A) at (-2,0)   [ left ]  {$A$};
+  \node (B) at ( 3,.5)  [ right ] {$B$};
+  \node (C) at (-2,2)   [ left ]  {$C$};
+  \node (D) at ( 3,2.5) [ right ] {$D$};
+  \node (E) at (60:-.5) [ below ] {$E$};
+  \node (F) at (60:3.5) [ above ] {$F$};
+  \coordinate[label=below right:X] (X) at (intersection cs:first line={(A)--(B)}, second line={(E)--(F)});
+  \coordinate[label=above left:Y] (Y) at (intersection cs:first line={(C)--(D)}, second line={(E)--(F)});
+  \path
+    (A) edge [thick] (B)
+    (C) edge [thick] (D)
+    (E) edge [thick] (F)
+    pic ["$\alpha$", draw, angle radius=.75cm, angle eccentricity=.6] {angle = F--X--A}
+    pic ["$\beta$", draw, angle radius=.75cm, angle eccentricity=.6] {angle = B--X--F}
+    pic ["$\gamma$", draw, angle radius=.3cm, angle eccentricity=1.7] {angle = E--Y--D}
+    pic ["$\delta$", draw, angle radius=.3cm, angle eccentricity=1.7] {angle = C--Y--E};
+\end{tikzpicture}' />
+
 <img class="tikztemplate" title="TikZ function graph" src="" data-tikz="\begin{tikzpicture}
   \node at (0,5.7) {http://mirrors.ctan.org/graphics/pgf/base/doc/pgfmanual.pdf};
 
   \draw[help lines] (-4,-2) grid (4,5);
-  \draw[<->] (-4.4,0) -- (4.4,0) node[above] {$x$-axis};
-  \draw[<->] (0,-2.2) -- (0,5.2) node[right] {$y$-axis};
+  \draw[-latex] (-4,0) -- (4,0) node[above right] {$x$-axis};
+  \draw[-latex] (0,-2) -- (0,5) node[above right] {$y$-axis};
   \draw foreach \i in {-4,...,4} { (\i,0.1) -- (\i,-0.1) node[below] {$\i$} };
-  \draw foreach \i in {-2,...,5} { (0.1,\i) -- (-0.1,\i) node[left] {$\i$} };
-  \draw[domain=-2.2:2.2, variable=\x, red, ultra thick] plot ({\x}, {(\x)^2}) node[right] {$y=x^2$};
+  \draw foreach \i in {-2,...,5} { (0.1,\i) -- (-0.1,\i) node[ left ] {$\i$} };
+  \draw[domain=-2.2:2.2, variable=\x, red, ultra thick] plot ({\x}, {(\x)^2}) node[ right ] {$y=x^2$};
   \draw[domain=-4:4, variable=\x, blue, ultra thick] plot ({\x}, {sin(deg(\x))}) node[below left] {$y=\sin x$};
 \end{tikzpicture}" />
 
@@ -87,30 +109,6 @@ textarea
             (q_1) edge [bend left]  node {$b$} (q_0);
 \end{tikzpicture}" />
 
-<img class="tikztemplate" title="Hyperbola" src="" data-tikz="\begin{tikzpicture}
-%preamble \usepackage{amsmath}
-\usetikzlibrary{arrows}
-
-\draw[gray, very thin,-triangle 60] (-4,0) -- (4,-0); % x-axis
-\draw[gray, very thin,-triangle 60] (0,-3) -- (0,3);  % y-axis
-\draw[gray, very thin] (-2,-1.5) rectangle (2,1.5);
-\draw[red,line width=2pt] (2.5,0) -- (2.5,1.125) node[right=1pt] {$\ell=\dfrac{b^2}{a}$}; % semi latus rectum
-\draw[domain=-1.3:1.3,smooth,variable=\t,line width=2pt] plot ({2*cosh(\t)},{1.5*sinh(\t)});
-\draw[domain=-1.3:1.3,smooth,variable=\t,line width=2pt] plot ({-2*cosh(\t)},{1.5*sinh(\t)});
-\node at (-1.2,-2.5) {$\dfrac{x^2}{a^2} - \dfrac{y^2}{b^2}=1$ };
-\node at (1.5,-2.5) {$r=\dfrac{b^2}{a - c \cos\theta}$ };
-\node at (-1.5,2.5) {$(\pm a \cosh u, b \sinh u)$ };
-\draw (-4,-3) -- (4,3);
-\draw (4,-3) -- (-4,3);
-\node at (-1.2,0.1) {a};
-\node at (-1.85,0.75) {b};
-\node at (-0.85,0.85) {c};
-\draw[triangle 60-triangle 60, green] (0,-0.3) -- (2.5,-0.3);
-\node[green] at (1.25,-4pt) {c};
-\fill (-2.5,0) circle (0.1); % focus
-\fill (2.5,0) circle (0.1);  % focus
-\end{tikzpicture}" />
-
 <img class="tikztemplate" title="Ellipse" src="" data-tikz="\begin{tikzpicture}
 %preamble \usepackage{amsmath}
 \usetikzlibrary{arrows}
@@ -131,24 +129,6 @@ textarea
 \node[green] at (-2.5,-5pt) {a};
 \fill (-4,0) circle (0.1);	% focus
 \fill (4,0) circle (0.1);	% focus
-\end{tikzpicture}" />
-
-<img class="tikztemplate" title="Parabola" src="" data-tikz="\begin{tikzpicture}
-%preamble \usepackage{amsmath}
-\usetikzlibrary{arrows}
-
-\draw[gray!50, very thin,-triangle 60] (-2,0) -- (4,-0);	% x-axis
-\draw[gray!50, very thin,-triangle 60] (0,-4) -- (0,4);	% y-axis
-\draw[red,line width=2pt] (1,0) -- (1,2) node[right=1pt] {$\ell=2a$};	% semi latus rectum
-\draw[rotate=-90,line width=2pt] (0,0) parabola (4,4);
-\draw[rotate=-90,line width=2pt] (0,0) parabola (-4,4);
-\node at (2.5,-2) {$y^2=4ax$ };
-\node at (4,-3) {$r=\dfrac{2a}{1-\cos\theta}$ };
-\node at (1.5,-3.5) {$(a t^2, 2at)$ };
-\draw (-1,-4) -- (-1,3.5) node[above=1pt] {directrix};	% directrix
-\node at (-0.5,3pt) {a};
-\node at (0.5,3pt) {c=a};
-\fill (1,0) circle (0.1);	% focus
 \end{tikzpicture}" />
 
 <img class="tikztemplate" title="Histogram" src="" data-tikz="\begin{tikzpicture}
@@ -290,135 +270,12 @@ textarea
 
 \end{tikzpicture}" />
 
-<img class="tikztemplate" title="Infinitesimal element in spherical coordinates" src="" data-tikz="\begin{tikzpicture}[font=\Large, >=stealth]
-%preamble \usepackage{amsmath}
-
-% \project{x}{y}{z} -> (x,y)
-\def\project#1#2#3{{(#2) - (#1)/2}, {(#3) - (#1)/4}};
-
-% \cilinder{rho}{phi}{z} -> (x,y,z)
-\def\cilinder#1#2#3{\project{(#1) * cos(#2)}{(#1) * sin(#2)}{#3}};
-
-% \spherical{r}{theta}{phi} -> (x,y,z)
-\def\spherical#1#2#3{\project{(#1) * sin(#2) * cos(#3)}{(#1) * sin(#2) * sin(#3)}{(#1) * cos(#2)}};
-
-%
-% CONSTANTS
-%
-\def\myaxelength{6.5};
-\def\myr{6};
-\def\mytheta{40};
-\def\myphi{60};
-
-\def\myrho{3};
-\def\myz{1.5};
-
-\colorlet{unitvectorcolor}{green!70!black};
-\colorlet{infinitesimalcolor}{red!90!black};
-\colorlet{coordinatecolor}{blue};
-
-% Axes
-\begin{scope}[help lines]
-\draw[->] (0,0) -- (\project{\myaxelength}{0}{0}) node[left] {$x$};
-\draw[->] (0,0) -- (\myaxelength,0) node[right] {$y$};
-\draw[->] (0,0) -- (0,\myaxelength) node[above] {$z$};
-\end{scope}
-
-% Help lines
-\begin{scope}[help lines]
-\draw[domain=0:\myphi,smooth,variable=\phi] plot (\cilinder{\myr * sin(\mytheta)}{\phi}{0});
-\draw[domain=0:\myphi,smooth,variable=\phi] plot (\cilinder{\myr * sin(\mytheta)}{\phi}{\myr * cos(\mytheta)});
-\draw[domain=0:\mytheta,smooth,variable=\theta] plot (\spherical{\myr}{\theta}{\myphi});
-
-\draw (0,0) -- (\cilinder{\myr * sin(\mytheta)}{\myphi}{0}) -- (\spherical{\myr}{\mytheta}{\myphi}) -- (0,{\myr * cos(\mytheta)});
-\draw (\cilinder{\myr * sin(\mytheta)}{0}{0}) -- (\cilinder{\myr * sin(\mytheta)}{0}{\myr * cos(\mytheta)}) -- (0,{\myr * cos(\mytheta)});
-\end{scope}
-
-% Coordinates
-\begin{scope}[coordinatecolor]
-\draw[ultra thick, ->] (0,0) -- (\spherical{\myr}{\mytheta}{\myphi});
-\node[below] at (0,0.1) {$\phi$};
-\node[above right] at (0,0.7) {$\theta$};
-\node[above] at (\spherical{\myr * 0.5}{\mytheta}{\myphi}) {$r$};
-\end{scope}
-
-% Unit vectors
-\begin{scope}[unitvectorcolor]
-\draw[->] (\spherical{\myr}{\mytheta}{\myphi}) -- (\spherical{\myr + 2.5}{\mytheta}{\myphi}) node[right] {$\boldsymbol{\hat r}$};
-\draw[->] (\spherical{\myr}{\mytheta}{\myphi}) -- (\spherical{sqrt(\myr*\myr+2.5*2.5)}{\mytheta + atan(2.5/\myr)}{\myphi}) node[right] {$\boldsymbol{\hat\theta}$};
-\draw[unitvectorcolor!50,->] (\spherical{\myr}{\mytheta}{\myphi}) -- (\spherical{sqrt(\myr*\myr+2.5*2.5)}{\mytheta}{\myphi + atan(2.5/\myr)}) node[right] {$\boldsymbol{\hat\phi}$};
-\end{scope}
-
-% Infinitesimal block
-\draw[infinitesimalcolor,ultra thick,domain=\mytheta:{\mytheta + atan(2/\myr)},smooth,variable=\theta] plot (\spherical{\myr}{\theta}{\myphi})
-        -- (\spherical{\myr + 2}{\mytheta + atan(2/\myr)}{\myphi})
-        [domain={\mytheta + atan(2/\myr)}:\mytheta,smooth,variable=\theta] plot (\spherical{\myr + 2}{\theta}{\myphi}) 
-        -- (\spherical{\myr}{\mytheta}{\myphi});
-
-\draw[infinitesimalcolor,ultra thick,domain=\myphi:{\myphi + atan(2/\myr)},smooth,variable=\phi] plot (\spherical{\myr + 2}{\mytheta}{\phi})
-        [domain=\mytheta:{\mytheta + atan(2/\myr)},smooth,variable=\theta] plot (\spherical{\myr + 2}{\theta}{\myphi + atan(2/\myr)})
-        [domain={\myphi + atan(2/\myr)}:\myphi,smooth,variable=\phi] plot (\spherical{\myr + 2}{\mytheta + atan(2/\myr)}{\phi}) ;
-
-\draw[infinitesimalcolor,ultra thick,domain=\myphi:{\myphi + atan(2/\myr)},smooth,variable=\phi] plot (\spherical{\myr}{\mytheta + atan(2/\myr)}{\phi})
-        -- (\spherical{\myr + 2}{\mytheta + atan(2/\myr)}{\myphi + atan(2/\myr)}) ;
-
-\node[infinitesimalcolor,font=,right] at (\spherical{\myr + 0.8}{\mytheta}{\myphi}) {$dr$};
-\node[infinitesimalcolor,font=,right] at (\spherical{\myr}{\mytheta + atan(0.7/\myr)}{\myphi}) {$rd\theta$};
-\node[infinitesimalcolor,font=,above] at (\spherical{\myr + 2}{\mytheta + atan(2/\myr)}{\myphi + atan(0.9/\myr)}) {$r\sin\theta d\phi$};
-
-\end{tikzpicture}" />
-
-<img class="tikztemplate" title="Bead necklaces" src="" data-tikz="\begin{tikzpicture}
-    %preamble \usetikzlibrary{shadows}
-    [font=\large,
-        bead/.style args={#1 on #2}{#2!70!black, circle, ball color=#2, color=#1,
-            general shadow={
-			shadow xshift=.4ex, shadow yshift=-.4ex,
-			opacity=.5, fill=black!50,
-		}},
-        bluebead/.style={bead={white on blue}},
-        mybluebead/.style={bead={white on myblue}},
-        redbead/.style={bead={black on red}}, 
-        greenbead/.style={bead={black on green}}, 
-    ]
-
-\definecolor{myblue}{HTML}{6060FF};
-
-\newcommand{\bead}[2] {
-   node[#1bead] (#2) {#2}
-}
-\newcommand{\sbead}[2] {
-   node[bead={black on #1}] (#2) {#2}
-}
-
-\newcommand{\bracelet}[1] {
-    coordinate (c1) +(1,-0.5) coordinate (c2) +(2,0) coordinate (c3)
-    \foreach \color [count=\i] in #1 {
-        (c\i) \bead{\color}{\i}
-    }
-    [draw, bend right] (1) edge[ultra thick] (2) (2) edge[ultra thick] (3) (3) edge[ultra thick] (1)
-} 
-
-\newcommand{\equivalenceclass}[1] {
-    node {\LARGE $\{$}
-    \foreach \colorseq [count=\seqi] in {#1} {
-        node {\LARGE $,$} ++(1,0) 
-        \bracelet\colorseq ++(1,0)
-    }
-    node {\LARGE $\}$}
-}
-
-\path (0,0) \equivalenceclass{{red,green,myblue}};
-\path (0,-2) \equivalenceclass{{red,myblue,green},{red,green,blue},{green,red,myblue}};
-%\path (0,-4) \equivalenceclass{{red,green,myblue},{red,myblue,green},{green,red,myblue},{green,myblue,red},{myblue,red,green},{myblue,green,red}}; 
-
-\end{tikzpicture}" />
-
-<img class="tikztemplate" title="Normal distribution" src="" data-tikz="\begin{tikzpicture}
+<img class="tikztemplate" title="Normal distribution" src="" data-tikz="\begin{tikzpicture}[
+  declare function={
+    gauss(\x,\mean,\sigma) = 1/((\sigma)*sqrt(2*pi))*exp(-((\x)-(\mean))^2/(2*(\sigma)^2)); 
+  },
+]
 %preamble \usepackage{pgfplots}
-\pgfmathdeclarefunction{gauss}{3}{%
-  \pgfmathparse{1/(#3*sqrt(2*pi))*exp(-((#1-#2)^2)/(2*#3^2))}%
-}
 \begin{axis}[
   no markers, domain=4.5:5.7, samples=100,
   axis lines*=left, xlabel=$x$, ylabel=$p$,
@@ -478,9 +335,11 @@ textarea
   \coordinate[label=C] (C) at (4,3);
   \draw[blue, ultra thick] (A) -- (B) -- (C) -- cycle;
   \path (A) -- node[below] {c} (B) -- node[right] {a} (C) -- node[above left] {b} (A);
-  \path (A) node at +({atan(3/4)/2}:0.7) {$\alpha$};
-  \draw[thick] (B) rectangle +(-0.4,0.4);
-  \draw[thick] (A) +(1,0) arc (0:atan(3/4):1);
+  \draw[thick,rotate=90] (B) rectangle +(0.4,0.4);
+  \draw[thick] (A) +(0:1) arc (0:atan2(3,4):1);
+  \path (A) node at +({atan2(3,4)/2}:0.7) {$\alpha$};
+  \draw[thick] (C) +({-90}:1) arc (-90:atan2(-3,-4):1);
+  \path (C) node at +({(-90 + atan2(-3,-4))/2}:0.7) {$\gamma$};
 \end{tikzpicture}
 </textarea></div>
 
